@@ -1,12 +1,23 @@
 import React from "react";
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
+
 // screens
 import Services from "../screens/Services";
 import Entries from "../screens/Entries";
 import Profile from "../screens/Profile";
+
+
+const EntriesStack = createStackNavigator();
+
+function EntriesStackScreen() {
+  return (
+    <EntriesStack.Navigator>
+      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Entradas' }}/>
+    </EntriesStack.Navigator>
+  );
+}
 
 
 const Tab = createBottomTabNavigator();
@@ -14,7 +25,7 @@ const Tab = createBottomTabNavigator();
 export default function HomeStack() {
   return (
     <Tab.Navigator 
-      initialRouteName="Services"
+      initialRouteName="Entries"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -26,7 +37,7 @@ export default function HomeStack() {
           } else if (route.name === 'Profile') {
             iconName = 'account';
           }
-          // You can return any component that you like here!
+
           return <Icon 
             name={iconName}
             type="material-community"
@@ -41,7 +52,7 @@ export default function HomeStack() {
       }}
     >
       <Tab.Screen name="Services" component={Services} options={{ title: 'Servicios' }}/>
-      <Tab.Screen name="Entries" component={Entries} options={{ title: 'Entradas' }}/>
+      <Tab.Screen name="Entries" component={EntriesStackScreen} options={{ title: 'Entradas' }}/>
       <Tab.Screen name="Profile" component={Profile} options={{ title: 'Perfil' }}/>
     </Tab.Navigator>
   )
