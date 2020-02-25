@@ -1,4 +1,4 @@
-import React, { Component, Fragment} from 'react';
+import React, { Component } from 'react';
 import { 
   Image,
   View, 
@@ -10,7 +10,7 @@ import {
 import { Button } from 'react-native-elements'
 import * as Yup from 'yup'
 import { Formik } from 'formik';
-
+import Input from '../components/Input';
 import AppContext from '../AppContext';
 import { loginUser } from '../API/AuthService';
 
@@ -68,29 +68,27 @@ export default function SignIn() {
           initialValues={{ login: '', password: '' }}
           onSubmit={values => {handleSubmit(values)}}
           validationSchema={validationSchema}
-          validateOnChange={false}
         >
           {({ handleChange, values, handleSubmit, errors }) => (
-            <Fragment>
-              <TextInput 
+            <>
+              <Input 
                 name="login"
                 value={values.login}
                 placeholder="Ingresa tu usuario o correo electrónico"
                 autoCapitalize='none'
-                onChangeText={handleChange('login')}
-                style={styles.textInput}
+                handleChange={handleChange}
+                error={errors.login}
               />
-              <Text style={styles.errorText}>{errors.login}</Text>
-              <TextInput
+
+              <Input 
                 name="password"
                 value={values.password}
-                placeholder="Enter password"
+                placeholder="Ingresa tu contraseña"
                 autoCapitalize='none'
                 secureTextEntry
-                onChangeText={handleChange('password')}
-                style={styles.textInput}
+                handleChange={handleChange}
+                error={errors.password}
               />
-              <Text style={styles.errorText}>{errors.password}</Text>
               {isLoading &&
                   <Text style={styles.textPrimary}>Procesando ...</Text>
               }
@@ -101,7 +99,7 @@ export default function SignIn() {
                   onPress={handleSubmit}
                 />
               }
-            </Fragment>
+            </>
           )}
         </Formik>
       </View>
