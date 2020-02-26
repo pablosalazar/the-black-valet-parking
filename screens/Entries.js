@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-
+import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
+import { Divider } from 'react-native-elements';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+
 import { Button, Input, Select } from '../components';
+
+//API
+import { registerCustomer } from '../API/CusotmerService';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -44,8 +48,15 @@ export default class Entries extends Component {
     };
   }
 
-  handleSubmit = (data) => {
-    console.log(data);
+  handleSubmit = async (data) => {
+    try {
+      console.log("entre");
+      const response = await registerCustomer(data);
+
+      console.log('hola', response, data);
+    } catch (error) {
+      
+    }
   }
 
   render() {
@@ -60,6 +71,7 @@ export default class Entries extends Component {
           >
             {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
               <>
+                <Text style={styles.title}>INFO CLIENTE</Text>
                 <Input
                   name='name'
                   label="Nombre del cliente"
@@ -75,7 +87,7 @@ export default class Entries extends Component {
                   handleChange={handleChange}
                   error={errors.document_type}
                 />
-
+                {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
                 <Input
                   name='document_number'
                   label="Número de documento"
@@ -90,6 +102,16 @@ export default class Entries extends Component {
                   value={values.phone}
                   handleChange={handleChange}
                   error={errors.phone}
+                />
+
+                <Text style={styles.title}>INFO VEHÍCULO</Text>
+
+                <Input
+                  name='plate'
+                  label="Placa del vehículo"
+                  value={values.plate}
+                  handleChange={handleChange}
+                  error={errors.plate}
                 />
 
                 {/* <Text>Ingrese la placa</Text>
@@ -137,10 +159,11 @@ export default class Entries extends Component {
 
 const styles = StyleSheet.create({
   title: {
-    textAlign: 'center',
     color: '#b98700',
     marginVertical: 20,
     fontSize: 20,
+    borderBottomWidth: 1,
+    borderColor: '#b98700',
   },
   textInput: {
     height: 50,
@@ -150,18 +173,6 @@ const styles = StyleSheet.create({
     borderColor: '#b98700',
     fontSize: 16,
   },
-  selectInput: {
-    color: '#969696',
-    height: 50,
-    borderWidth: 1,
-  },
-  label: {
-    color: "#fff",
-    marginTop: 14,
-    marginBottom: 5,
-    textTransform: "uppercase",
-    fontWeight: 'bold',
-  },  
   buttonPrimary: {
     backgroundColor: "#b98700",
     marginTop: 40,

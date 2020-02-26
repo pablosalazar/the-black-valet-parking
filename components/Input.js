@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, TextInput } from 'react-native';
+import { Text, View, StyleSheet, TextInput } from 'react-native';
 
 const Input = (props) => {
   const { 
@@ -11,7 +11,7 @@ const Input = (props) => {
   } = props;
 
   return (
-    <>
+    <View style={styles.containerInput}>
       {label && <Text style={styles.label}>{label}</Text>}
       <TextInput
         name={name}
@@ -20,25 +20,29 @@ const Input = (props) => {
         style={styles.textInput}
         {...props}
       />
-      {/* <Text style={styles.errorText}>{error}</Text> */}
-    </>
+      {error && <Text style={styles.errorText}>{error}</Text>}
+    </View>
   );
 };
 
 export default Input;
 
 const styles = StyleSheet.create({
+  containerInput: {
+    marginVertical: 6,
+  },
   textInput: {
-    backgroundColor: '#232223',
+    backgroundColor: '#1b191b',
     height: 50,
-    color: '#969696',
+    color: '#fff',
     paddingLeft: 15,
     borderWidth: 1,
-    borderColor: '#b98700',
+    borderColor: 'rgba(185,135,0,.6)',
     fontSize: 16,
+    borderRadius: 10,
   },
   label: {
-    color: "#fff",
+    color: "#969696",
     textTransform: "uppercase",
     fontWeight: 'bold',
   },

@@ -48,7 +48,7 @@ const Select = (props) => {
           );
         }}
       />
-      {/* <Text style={styles.errorText}>{error}</Text> */}
+      {error && <Text style={styles.errorText}>{error}</Text>}
     </>
   );
 };
@@ -57,7 +57,7 @@ export default Select;
 
 const styles = StyleSheet.create({
   label: {
-    color: "#fff",
+    color: "#969696",
     textTransform: "uppercase",
     fontWeight: 'bold',
   },
@@ -65,23 +65,23 @@ const styles = StyleSheet.create({
     color: '#c43d4b', 
   },
   inputIOS: {
-    backgroundColor: '#232223',
+    backgroundColor: '#1b191b',
     fontSize: 16,
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderColor: '#b98700',
+    borderColor: 'rgba(185,135,0,.6)',
     color: '#fff',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    borderRadius: 10,
   },
   inputAndroid: {
-    backgroundColor: '#232223',
+    backgroundColor: '#1b191b',
     fontSize: 16,
     paddingHorizontal: 10,
     paddingVertical: 11,
     borderWidth: 1,
-    borderColor: '#b98700',   
+    borderColor: 'rgba(185,135,0,.6)',   
     color: '#fff',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    borderRadius: 10,
   },
 });

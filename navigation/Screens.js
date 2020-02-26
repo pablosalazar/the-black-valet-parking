@@ -14,7 +14,7 @@ const EntriesStack = createStackNavigator();
 function EntriesStackScreen() {
   return (
     <EntriesStack.Navigator>
-      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Entradas' }}/>
+      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Ingreso de vehículo' }}/>
     </EntriesStack.Navigator>
   );
 }
@@ -52,7 +52,7 @@ export default function HomeStack() {
       }}
     >
       <Tab.Screen name="Services" component={Services} options={{ title: 'Servicios' }}/>
-      <Tab.Screen name="Entries" component={EntriesStackScreen} options={{ title: 'Entradas' }}/>
+      <Tab.Screen name="Entries" component={EntriesStackScreen} options={{ title: 'Ingresar' }}/>
       <Tab.Screen name="Profile" component={Profile} options={{ title: 'Perfil' }}/>
     </Tab.Navigator>
   )
