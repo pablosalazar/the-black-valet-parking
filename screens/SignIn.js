@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { 
   Image,
   View, 
-  Text, 
-  TextInput, 
+  Text,
   StyleSheet,
   KeyboardAvoidingView
 } from 'react-native';
@@ -115,21 +114,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     fontSize: 20,
   },
-  textInput: {
-    height: 40,
-    color: '#969696',
-    paddingLeft: 15,
-    borderWidth: 1,
-    borderColor: '#b98700',
-  },
   buttonPrimary: {
     backgroundColor: "#b98700",
     marginTop: 10,
     paddingHorizontal: 40,
-  },
-  errorText: {
-    color: '#c43d4b',
-    marginBottom: 5, 
   },
   textDanger: {
     paddingHorizontal: 20,

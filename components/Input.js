@@ -20,7 +20,7 @@ const Input = (props) => {
         style={styles.textInput}
         {...props}
       />
-      <Text style={styles.errorText}>{error}</Text>
+      {/* <Text style={styles.errorText}>{error}</Text> */}
     </>
   );
 };
@@ -29,6 +29,7 @@ export default Input;
 
 const styles = StyleSheet.create({
   textInput: {
+    backgroundColor: '#232223',
     height: 50,
     color: '#969696',
     paddingLeft: 15,
@@ -38,13 +39,11 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#fff",
-    marginTop: 14,
-    marginBottom: 5,
     textTransform: "uppercase",
     fontWeight: 'bold',
   },
   errorText: {
     color: '#c43d4b',
-    marginBottom: 5, 
+    marginBottom: 0,
   },
 })

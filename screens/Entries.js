@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput, View, Text, Picker, Button, Icon, Platform } from 'react-native';
-import SelectInput from 'react-native-select-input-ios';
-import RNPickerSelect from 'react-native-picker-select';
+import { StyleSheet, View, Text } from 'react-native';
+
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import Input from '../components/Input';
+import { Button, Input, Select } from '../components';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
-    .label('Nombre')
     .required('Este campo es requerido'),
-  // document_type: Yup.string()
-  //   .label('Tipo de documento')
-  //   .required('Este campo es requerido'),
-  // document_number: Yup.string()
-  //   .label('Número de documento')
-  //   .required('Este campo es requerido'),
-  // phone: Yup.string()
-  //   .label('Telefono')
-  //   .required('Este campo es requerido'),
+  document_type: Yup.string()
+    .required('Este campo es requerido'),
+  document_number: Yup.string()
+    .label('Número de documento')
+    .required('Este campo es requerido'),
+  phone: Yup.string()
+    .label('Telefono')
+    .required('Este campo es requerido'),
   // plate: Yup.string()
   //   .label('Placa')
   //   .required('Este campo es requerido'),
@@ -70,101 +67,30 @@ export default class Entries extends Component {
                   handleChange={handleChange}
                   error={errors.name}
                 />
-                {/* <Text style={styles.label}>Nombre del cliente</Text>
-                <TextInput
-                  name="name"
-                  value={values.name}
-                  onChangeText={handleChange('name')}
-                  onBlur={handleBlur('name')}
-                  style={styles.textInput}
-                />
-                <Text style={styles.errorText}>{errors.name}</Text>
-                <Text style={styles.label}>Tipo de documento</Text>
-                
-                <RNPickerSelect
-                  onValueChange={handleChange('document_type')}
-                  placeholder={{
-                    label: 'Seleccione una opción...',
-                    value: '',
-                    color: '#9EA0A4',
-                  }}
-                  mode="dialog"
-                  style={pickerSelectStyles}
-                  useNativeAndroidPickerStyle={false}
-                  items={[
-                      { label: 'CC - Cédula de ciudadanía', value: 'CC' },
-                      { label: 'TI - Tarjeta de identidad', value: 'TI' },
-                      { label: 'CE - Cédula de extranjería', value: 'CE' },
-                  ]}
-                  Icon={() => {
-                    return (
-                      <View
-                        style={{
-                          backgroundColor: 'transparent',
-                          borderTopWidth: 6,
-                          borderTopColor: '#b98700',
-                          borderRightWidth: 6,
-                          borderRightColor: 'transparent',
-                          borderLeftWidth: 6,
-                          borderLeftColor: 'transparent',
-                          width: 0,
-                          height: 0,
-                          top: 23,
-                          right: 10,
-                        }}
-                      />
-                    );
-                  }}
-                />
-                <Text style={styles.errorText}>{errors.document_type}</Text> */}
-                
-                {/* <View style={styles.formGroup}>
-                  <Picker
-                    selectedValue={this.state.language}
-                    placeholder="Select your SIM"
-                    style={styles.selectInput}
-                    mode="dialog"
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.setState({language: itemValue})
-                    }>
-                    <Picker.Item label="Seleccione una opcion" value="" />
-                    <Picker.Item label="Java" value="java" />
-                    
-                    <Picker.Item label="JavaScript" value="js" />
-                  </Picker>
-                </View> */}
 
-            
-                {/* <TextInput
-                  name="document_type"
+                <Select
+                  name='document_type'
+                  label="Tipo de documento"
                   value={values.document_type}
-                  onChangeText={handleChange('document_type')}
-                  onBlur={handleBlur('document_type')}
-                  style={styles.textInput}
-                /> */}
-                {/* <ErrorMessage errorValue={touched.document_type && errors.document_type} /> */}
+                  handleChange={handleChange}
+                  error={errors.document_type}
+                />
 
-                {/*<Text>Número de documento</Text>
-                <TextInput 
-                  name="document_number"
+                <Input
+                  name='document_number'
+                  label="Número de documento"
                   value={values.document_number}
-                  onChangeText={handleChange('document_number')}
-                  onBlur={handleBlur('document_number')}
-                  style={styles.textInput}
+                  handleChange={handleChange}
+                  error={errors.document_number}
                 />
-                <ErrorMessage errorValue={touched.document_number && errors.document_number} />
 
-                <Text>Teléfono</Text>
-                <TextInput 
-                  name="phone"
+                <Input
+                  name='phone'
+                  label="Teléfono del cliente"
                   value={values.phone}
-                  onChangeText={handleChange('phone')}
-                  onBlur={handleBlur('phone')}
-                  style={styles.textInput}
+                  handleChange={handleChange}
+                  error={errors.phone}
                 />
-                <ErrorMessage errorValue={touched.phone && errors.phone} />
-
-                <Divider style={{ backgroundColor: '#000' }} /> */}
 
                 {/* <Text>Ingrese la placa</Text>
                 <TextInput
@@ -197,10 +123,9 @@ export default class Entries extends Component {
                 <ErrorMessage errorValue={touched.color && errors.color} /> */}
                 <View paddingVertical={5} />
                 <Button
-                  buttonStyle={styles.buttonPrimary}
-                  title="REGISTRAR"
-                  onPress={handleSubmit}
-                  disabled={isLoading}
+                  label="REGISTRAR"
+                  handleSubmit={handleSubmit}
+                  // disabled={isLoading}
                 />
               </>
             )}
@@ -264,23 +189,3 @@ const styles = StyleSheet.create({
   },
 })
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#b98700',
-    color: '#969696',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 11,
-    borderWidth: 1,
-    borderColor: '#b98700',   
-    color: '#969696',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-});
