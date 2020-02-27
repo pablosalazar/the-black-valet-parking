@@ -18,7 +18,7 @@ function getAxiosIntance() {
 
 export async function registerVehicle(data) {
   try {
-    const response = await getAxiosIntance().post('/', data);
+    const response = await getAxiosIntance().post('', data);
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data.error : error.message;

@@ -32,9 +32,11 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
   textInput: {
-    backgroundColor: '#1b191b',
-    height: 50,
+    textAlignVertical: 'top',
+    backgroundColor: '#1b191b',    
     color: '#fff',
+    paddingTop: 14,
+    paddingBottom: 8,
     paddingLeft: 15,
     borderWidth: 1,
     borderColor: 'rgba(185,135,0,.6)',

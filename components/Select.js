@@ -6,6 +6,7 @@ const Select = (props) => {
   const {
     name,
     label,
+    items,
     handleChange,
     error
   } = props;
@@ -23,11 +24,7 @@ const Select = (props) => {
         mode="dialog"
         style={styles}
         useNativeAndroidPickerStyle={false}
-        items={[
-            { label: 'CC - Cédula de ciudadanía', value: 'CC' },
-            { label: 'TI - Tarjeta de identidad', value: 'TI' },
-            { label: 'CE - Cédula de extranjería', value: 'CE' },
-        ]}
+        items={items}
         Icon={() => {
           return (
             <View

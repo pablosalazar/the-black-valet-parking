@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Divider } from 'react-native-elements';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -8,6 +8,7 @@ import { Button, Input, Select } from '../components';
 
 //API
 import { registerCustomer } from '../API/CusotmerService';
+import { registerVehicle } from '../API/VehicleService';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -20,16 +21,28 @@ const validationSchema = Yup.object().shape({
   phone: Yup.string()
     .label('Telefono')
     .required('Este campo es requerido'),
-  // plate: Yup.string()
-  //   .label('Placa')
-  //   .required('Este campo es requerido'),
-  // brand: Yup.string()
-  //   .label('Marca')
-  //   .required('Este campo es requerido'),
-  // color: Yup.string()
-  //   .label('Color')
-  //   .required('Este campo es requerido'),
+  plate: Yup.string()
+    .label('Placa')
+    .required('Este campo es requerido'),
+  brand: Yup.string()
+    .label('Marca')
+    .required('Este campo es requerido'),
+  color: Yup.string()
+    .label('Color')
+    .required('Este campo es requerido'),
 })
+
+const document_type_list = [
+  { label: 'CC - Cédula de ciudadanía', value: 'CC' },
+  { label: 'TI - Tarjeta de identidad', value: 'TI' },
+  { label: 'CE - Cédula de extranjería', value: 'CE' },
+];
+
+const brand_list = [
+  { label: 'KIA', value: 'KIA' },
+  { label: 'Chevrolet', value: 'Chevrolet' },
+  { label: 'Mazda', value: 'Mazda' },
+]
 
 export default class Entries extends Component {
   constructor(props) {
@@ -38,11 +51,11 @@ export default class Entries extends Component {
       data: {
         name: '',
         document_type: '',
-        // document_number: '',
-        // phone: '',
-        // plate: '',
-        // brand: '',
-        // color: '',
+        document_number: '',
+        phone: '',
+        plate: '',
+        brand: '',
+        color: '',
       },
       error: null
     };
@@ -50,10 +63,13 @@ export default class Entries extends Component {
 
   handleSubmit = async (data) => {
     try {
-      console.log("entre");
-      const response = await registerCustomer(data);
 
-      console.log('hola', response, data);
+      const customer = await registerCustomer(data);
+      const vehicle = await registerVehicle({
+        ...data,
+        customer_id: customer.id,
+      });
+      
     } catch (error) {
       
     }
@@ -62,97 +78,102 @@ export default class Entries extends Component {
   render() {
     const { data, error, isLoading } = this.state;
     return (
-      <View style={{flex: 1, paddingHorizontal: 30 }}>
-        {error && <Text>{error}</Text>}
-        <Formik
-            initialValues={data}
-            onSubmit={values => {this.handleSubmit(values)}}
-            validationSchema={validationSchema}
-          >
-            {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
-              <>
-                <Text style={styles.title}>INFO CLIENTE</Text>
-                <Input
-                  name='name'
-                  label="Nombre del cliente"
-                  value={values.name}
-                  handleChange={handleChange}
-                  error={errors.name}
-                />
+      <ScrollView style={styles.scrollView}>
+        <View style={{flex: 1, paddingHorizontal: 30 }}>
+          {error && <Text>{error}</Text>}
+          <Formik
+              initialValues={data}
+              onSubmit={values => {this.handleSubmit(values)}}
+              validationSchema={validationSchema}
+            >
+              {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
+                <>
+                  <Text style={styles.title}>INFO CLIENTE</Text>
+                  <Input
+                    name='name'
+                    label="Nombre del cliente"
+                    value={values.name}
+                    handleChange={handleChange}
+                    error={errors.name}
+                  />
 
-                <Select
-                  name='document_type'
-                  label="Tipo de documento"
-                  value={values.document_type}
-                  handleChange={handleChange}
-                  error={errors.document_type}
-                />
-                {/* <Divider style={{ backgroundColor: 'blue' }} />; */}
-                <Input
-                  name='document_number'
-                  label="Número de documento"
-                  value={values.document_number}
-                  handleChange={handleChange}
-                  error={errors.document_number}
-                />
+                  <Select
+                    name='document_type'
+                    items={document_type_list}
+                    label="Tipo de documento"
+                    value={values.document_type}
+                    handleChange={handleChange}
+                    error={errors.document_type}
+                  />
+                  
+                  <Input
+                    name='document_number'
+                    label="Número de documento"
+                    value={values.document_number}
+                    handleChange={handleChange}
+                    error={errors.document_number}
+                  />
 
-                <Input
-                  name='phone'
-                  label="Teléfono del cliente"
-                  value={values.phone}
-                  handleChange={handleChange}
-                  error={errors.phone}
-                />
+                  <Input
+                    name='phone'
+                    label="Teléfono del cliente"
+                    value={values.phone}
+                    handleChange={handleChange}
+                    error={errors.phone}
+                  />
 
-                <Text style={styles.title}>INFO VEHÍCULO</Text>
+                  <Text style={styles.title}>INFO VEHÍCULO</Text>
 
-                <Input
-                  name='plate'
-                  label="Placa del vehículo"
-                  value={values.plate}
-                  handleChange={handleChange}
-                  error={errors.plate}
-                />
+                  <Input
+                    name='plate'
+                    label="Placa del vehículo"
+                    value={values.plate}
+                    handleChange={handleChange}
+                    error={errors.plate}
+                  />
 
-                {/* <Text>Ingrese la placa</Text>
-                <TextInput
-                  name="plate"
-                  value={values.plate}
-                  onChangeText={handleChange('plate')}
-                  onBlur={handleBlur('plate')}
-                  style={styles.textInput}
-                />
-                <ErrorMessage errorValue={touched.plate && errors.plate} />
+                  <Select
+                    name='brand'
+                    items={brand_list}
+                    label="Marca del vehiculo"
+                    value={values.brand}
+                    handleChange={handleChange}
+                    error={errors.brand}
+                  />
 
-                <Text>Elija la marca</Text>
-                <TextInput 
-                  name="brand"
-                  value={values.brand}
-                  onChangeText={handleChange('brand')}
-                  onBlur={handleBlur('brand')}
-                  style={styles.textInput}
-                />
-                <ErrorMessage errorValue={touched.brand && errors.brand} />
+                  <Input
+                    name='color'
+                    label="Color del vehículo"
+                    value={values.color}
+                    handleChange={handleChange}
+                    error={errors.color}
+                  />
 
-                <Text>Digite el color</Text>
-                <TextInput 
-                  name="color"
-                  value={values.color}
-                  onChangeText={handleChange('color')}
-                  onBlur={handleBlur('color')}
-                  style={styles.textInput}
-                />
-                <ErrorMessage errorValue={touched.color && errors.color} /> */}
-                <View paddingVertical={5} />
-                <Button
-                  label="REGISTRAR"
-                  handleSubmit={handleSubmit}
-                  // disabled={isLoading}
-                />
-              </>
-            )}
-        </Formik>
-      </View>
+                  {/* <Text style={styles.title}>ESTADO VEHÍCULO</Text>
+
+                  <Input
+                    name='plate'
+                    label="Color del vehículo"
+                    multiline
+                    numberOfLines={5}
+                    value={values.plate}
+                    handleChange={handleChange}
+                    error={errors.plate}
+                  /> */}
+
+             
+                  <View paddingVertical={5} />
+                  <Button
+                    label="REGISTRAR"
+                    handleSubmit={handleSubmit}
+                    // disabled={isLoading}
+                  />
+                  <View paddingVertical={20} />
+                </>
+              )}
+          </Formik>
+        </View>
+      </ScrollView>
     )
   }
 }
@@ -164,6 +185,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderBottomWidth: 1,
     borderColor: '#b98700',
+  },
+  scrollView: {
+    // backgroundColor: '#232223',
+    // marginHorizontal: 10,
+    
   },
   textInput: {
     height: 50,
