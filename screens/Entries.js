@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { Divider } from 'react-native-elements';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import { Button, Input, Select } from '../components';
+import { Button, Input, Select, Loader } from '../components';
 
 //API
 import { registerCustomer } from '../API/CusotmerService';
@@ -63,7 +62,7 @@ export default class Entries extends Component {
 
   handleSubmit = async (data) => {
     try {
-
+      this.setState({ isLoading: true });
       const customer = await registerCustomer(data);
       const vehicle = await registerVehicle({
         ...data,
@@ -71,15 +70,18 @@ export default class Entries extends Component {
       });
       
     } catch (error) {
-      
+      this.setState( error );
+    } finally {
+      this.setState({ isLoading: false });
     }
   }
 
   render() {
     const { data, error, isLoading } = this.state;
     return (
-      <ScrollView style={styles.scrollView}>
+      <ScrollView>
         <View style={{flex: 1, paddingHorizontal: 30 }}>
+          {isLoading && <Loader />}
           {error && <Text>{error}</Text>}
           <Formik
               initialValues={data}
@@ -88,6 +90,7 @@ export default class Entries extends Component {
             >
               {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
                 <>
+                  {error && <Text style={styles.title}>{error}</Text>}
                   <Text style={styles.title}>INFO CLIENTE</Text>
                   <Input
                     name='name'
@@ -185,11 +188,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderBottomWidth: 1,
     borderColor: '#b98700',
-  },
-  scrollView: {
-    // backgroundColor: '#232223',
-    // marginHorizontal: 10,
-    
   },
   textInput: {
     height: 50,
