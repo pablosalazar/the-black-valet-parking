@@ -6,6 +6,7 @@ const Select = (props) => {
   const {
     name,
     label,
+    value,
     items,
     handleChange,
     error
@@ -21,6 +22,7 @@ const Select = (props) => {
           value: '',
           color: '#9EA0A4',
         }}
+        value={value}
         mode="dialog"
         style={styles}
         useNativeAndroidPickerStyle={false}
