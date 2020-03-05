@@ -49,6 +49,7 @@ export default class Entries extends Component {
   handleSelectVehicle = (index) => {
     const { vehicleList } = this.state;
     this.props.navigation.navigate('ChooseCustomer', {
+      vehicleSelected: vehicleList[index],
       customerList: vehicleList[index].customers,
     });
   }

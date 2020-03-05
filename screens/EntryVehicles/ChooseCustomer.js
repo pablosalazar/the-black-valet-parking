@@ -4,11 +4,12 @@ import TouchableScale from 'react-native-touchable-scale';
 import { Avatar, ListItem } from 'react-native-elements';
 
 export default ChooseCustomer = ({route, navigation}) => {
-  const { customerList } = route.params;
+  const { vehicleSelected, customerList } = route.params;
 
   const handleSelectCustomer = (index) => {
    navigation.navigate('EntryForm', {
-     customerSelected: customerList[index],
+    vehicleSelected,
+    customerSelected: customerList[index],
    });
   }
   

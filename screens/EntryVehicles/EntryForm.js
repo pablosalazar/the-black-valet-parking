@@ -41,21 +41,22 @@ const brand_list = [
   { label: 'KIA', value: 'KIA' },
   { label: 'Chevrolet', value: 'Chevrolet' },
   { label: 'Mazda', value: 'Mazda' },
+  { label: 'YAMAHA', value: 'YAMAHA' },
 ]
 
 export default class Entries extends Component {
   constructor(props) {
     super(props);
-    const { route: { params: { customerSelected }} } = props;
+    const { route: { params: { vehicleSelected, customerSelected }} } = props;
     this.state = {
       data: {
         name: customerSelected ? customerSelected.name : '',
         document_type: customerSelected ? customerSelected.document_type : '',
         document_number: customerSelected ? customerSelected.document_number : '',
         phone: customerSelected ? customerSelected.phone : '',
-        plate: '',
-        brand: '',
-        color: '',
+        plate: vehicleSelected ? vehicleSelected.plate : '',
+        brand: vehicleSelected ? vehicleSelected.brand : '',
+        color: vehicleSelected ? vehicleSelected.color : '',
       },
       error: null,
       isLoading: true,
@@ -65,7 +66,6 @@ export default class Entries extends Component {
   componentDidMount() {
     const { data } = this.state;
     const { route: { params: { customerSelected }} } = this.props;
-    console.log(customerSelected);
     this.setState({
       data: {
         ...data,
