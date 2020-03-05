@@ -1,2 +1,3 @@
 validar que la placa tenga 6 caracteres?
 avatar como component
+revisar la app cuando el api esta caido (la app no muestra ninguna señal de que algo esta mal)
