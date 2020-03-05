@@ -3,9 +3,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
 
-// screens
+// SCREENS
 import Services from "../screens/Services";
-import Entries from "../screens/Entries";
+// Entry vehicle
+import Entries from "../screens/EntryVehicles/Entries";
+import ChooseCustomer from "../screens/EntryVehicles/ChooseCustomer";
+import EntryForm from "../screens/EntryVehicles/EntryForm";
+
 import Profile from "../screens/Profile";
 
 
@@ -14,7 +18,10 @@ const EntriesStack = createStackNavigator();
 function EntriesStackScreen() {
   return (
     <EntriesStack.Navigator>
-      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Ingreso de vehículo' }}/>
+      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Registro de entrada' }}/>
+      <EntriesStack.Screen name="ChooseCustomer" component={ChooseCustomer} options={{ title: 'Elige al cliente' }}/>
+      <EntriesStack.Screen name="EntryForm" component={EntryForm} options={{ title: 'Formulario' }}/>
+
     </EntriesStack.Navigator>
   );
 }

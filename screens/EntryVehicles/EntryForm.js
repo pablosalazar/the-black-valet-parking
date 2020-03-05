@@ -3,11 +3,11 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import { Button, Input, Select, Loader } from '../components';
+import { Button, Input, Select, Loader } from '../../components';
 
 //API
-import { registerCustomer } from '../API/CusotmerService';
-import { registerVehicle } from '../API/VehicleService';
+import { registerCustomer } from '../../API/CusotmerService';
+import { registerVehicle } from '../../API/VehicleService';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -46,18 +46,36 @@ const brand_list = [
 export default class Entries extends Component {
   constructor(props) {
     super(props);
+    const { route: { params: { customerSelected }} } = props;
     this.state = {
       data: {
-        name: '',
-        document_type: '',
-        document_number: '',
-        phone: '',
+        name: customerSelected ? customerSelected.name : '',
+        document_type: customerSelected ? customerSelected.document_type : '',
+        document_number: customerSelected ? customerSelected.document_number : '',
+        phone: customerSelected ? customerSelected.phone : '',
         plate: '',
         brand: '',
         color: '',
       },
-      error: null
+      error: null,
+      isLoading: true,
     };
+  }
+
+  componentDidMount() {
+    const { data } = this.state;
+    const { route: { params: { customerSelected }} } = this.props;
+    console.log(customerSelected);
+    this.setState({
+      data: {
+        ...data,
+        name: customerSelected.name,
+        document_type: customerSelected.document_type,
+        document_number: customerSelected.document_number,
+        phone: customerSelected.phone,
+      },
+      isLoading: false,
+    })
   }
 
   handleSubmit = async (data) => {
@@ -78,6 +96,7 @@ export default class Entries extends Component {
 
   render() {
     const { data, error, isLoading } = this.state;
+    
     return (
       <ScrollView>
         <View style={{flex: 1, paddingHorizontal: 30 }}>
