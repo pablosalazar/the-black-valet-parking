@@ -8,8 +8,8 @@ const Input = (props) => {
     value, 
     error, 
     handleChange,
+    editable,
   } = props;
-
 
   return (
     <View style={styles.containerInput}>
@@ -18,7 +18,7 @@ const Input = (props) => {
         name={name}
         value={value}
         onChangeText={handleChange(name)}
-        style={styles.textInput}
+        style={editable !== false ? styles.textInput : [ styles.textInput, styles.readOnly]}
         {...props}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -43,6 +43,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(185,135,0,.6)',
     fontSize: 16,
     borderRadius: 10,
+  },
+  readOnly: {
+    backgroundColor: '#000',    
   },
   label: {
     color: "#969696",

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Alert } from 'react-native';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+// import AwesomeAlert from 'react-native-awesome-alerts';
 
 import { Button, Input, Select, Loader } from '../../components';
 
@@ -44,9 +45,9 @@ const document_type_list = [
 
 const brand_list = [
   { label: 'KIA', value: 'KIA' },
-  { label: 'Chevrolet', value: 'Chevrolet' },
-  { label: 'Mazda', value: 'Mazda' },
-  { label: 'YAMAHA', value: 'YAMAHA' },
+  { label: 'CHEVROLET', value: 'CHEVROLET' },
+  { label: 'MAZDA', value: 'MAZDA' },
+  { label: 'TOYOTA', value: 'TOYOTA' },
 ]
 
 export default class Entries extends Component {
@@ -64,9 +65,13 @@ export default class Entries extends Component {
         brand: vehicleSelected ? vehicleSelected.brand : '',
         color: vehicleSelected ? vehicleSelected.color : '',
       },
+      isVehicleExisting: vehicleSelected ? true : false,
+      isCustomerExisting: customerSelected ? true : false,
       error: null,
       isLoading: false,
     };
+    this.isAlertShowed = false;
+    this.myRef = React.createRef();
   }
 
 
@@ -86,107 +91,133 @@ export default class Entries extends Component {
     }
   }
 
+  launchAlert = (errors) => {
+    const keysErrors = Object.keys(errors);
+    if (keysErrors.length && !this.isAlertShowed) {
+      this.isAlertShowed = true;
+      Alert.alert(
+        'INFO',
+        'Algunos campos presentan conflicto',
+        [
+          {text: 'OK', onPress: () => {
+            this.isAlertShowed = false;
+            this.refs._scrollView.scrollTo({x: 0, y: 0, animated: true})
+          }},
+        ],
+        {cancelable: false},
+      );
+    }
+  }
+
   render() {
-    const { vehicleSelected, customerSelected, data, error, isLoading } = this.state;
+    const { isCustomerExisting, isVehicleExisting, data, error, isLoading } = this.state;
     
     return (
-      <ScrollView>
-        <View style={{flex: 1, paddingHorizontal: 30 }}>
-          {isLoading && <Loader />}
-          {error && <Text>{error}</Text>}
-          <Formik
-              initialValues={data}
-              onSubmit={values => {this.handleSubmit(values)}}
-              validationSchema={validationSchema}
-            >
-              {({ handleChange, values, handleSubmit, errors }) => (
-                <>
-                  {error && <Text style={styles.title}>{error}</Text>}
-                  <Text style={styles.title}>INFO CLIENTE</Text>
-                  <Input
-                    name='name'
-                    label="Nombre del cliente"
-                    value={values.name}
-                    handleChange={handleChange}
-                    error={errors.name}
-                  />
+      <View>
+        <ScrollView ref='_scrollView'>
+          <View style={{flex: 1, paddingHorizontal: 30 }}>
+            {isLoading && <Loader />}
+            {error && <Text>{error}</Text>}
+            <Formik
+                initialValues={data}
+                onSubmit={values => {this.handleSubmit(values)}}
+                validationSchema={validationSchema}
+              >
+                {({ handleChange, values, handleSubmit, errors }) => (
+                  <>
+                    {this.launchAlert(errors)}
+                    {error && <Text style={styles.title}>{error}</Text>}
+                    <Text style={styles.title}>INFO CLIENTE</Text>
+                    <Input
+                      name='name'
+                      label="Nombre del cliente"
+                      value={values.name}
+                      handleChange={handleChange}
+                      error={errors.name}
+                    />
 
-                  <Select
-                    name='document_type'
-                    items={document_type_list}
-                    label="Tipo de documento"
-                    value={values.document_type}
-                    handleChange={handleChange}
-                    error={errors.document_type}
-                  />
-                  
-                  <Input
-                    name='document_number'
-                    label="Número de documento"
-                    value={values.document_number}
-                    handleChange={handleChange}
-                    error={errors.document_number}
-                  />
+                    <Select
+                      name='document_type'
+                      items={document_type_list}
+                      label="Tipo de documento"
+                      value={values.document_type}
+                      handleChange={handleChange}
+                      error={errors.document_type}
+                      editable={isCustomerExisting ? false : true }
+                    />
+                    
+                    <Input
+                      name='document_number'
+                      label="Número de documento"
+                      value={values.document_number}
+                      handleChange={handleChange}
+                      error={errors.document_number}
+                      editable={isCustomerExisting ? false : true }
+                    />
 
-                  <Input
-                    name='phone'
-                    label="Teléfono del cliente"
-                    value={values.phone}
-                    handleChange={handleChange}
-                    error={errors.phone}
-                  />
+                    <Input
+                      name='phone'
+                      label="Teléfono del cliente"
+                      value={values.phone}
+                      handleChange={handleChange}
+                      error={errors.phone}
+                    />
 
-                  <Text style={styles.title}>INFO VEHÍCULO</Text>
+                    <Text style={styles.title}>INFO VEHÍCULO</Text>
 
-                  <Input
-                    name='plate'
-                    label="Placa del vehículo"
-                    value={values.plate}
-                    handleChange={handleChange}
-                    error={errors.plate}
-                  />
+                    <Input
+                      name='plate'
+                      label="Placa del vehículo"
+                      value={values.plate}
+                      handleChange={handleChange}
+                      error={errors.plate}
+                      editable={isVehicleExisting ? false : true }
+                    />
 
-                  <Select
-                    name='brand'
-                    items={brand_list}
-                    label="Marca del vehiculo"
-                    value={values.brand}
-                    handleChange={handleChange}
-                    error={errors.brand}
-                  />
+                    <Select
+                      name='brand'
+                      items={brand_list}
+                      label="Marca del vehiculo"
+                      value={values.brand}
+                      handleChange={handleChange}
+                      error={errors.brand}
+                      editable={isVehicleExisting ? false : true }
+                    />
 
-                  <Input
-                    name='color'
-                    label="Color del vehículo"
-                    value={values.color}
-                    handleChange={handleChange}
-                    error={errors.color}
-                  />
+                    <Input
+                      name='color'
+                      label="Color del vehículo"
+                      value={values.color}
+                      handleChange={handleChange}
+                      error={errors.color}
+                      editable={isVehicleExisting ? false : true }
+                    />
 
-                  {/* <Text style={styles.title}>ESTADO VEHÍCULO</Text>
+                    {/* <Text style={styles.title}>ESTADO VEHÍCULO</Text>
 
-                  <Input
-                    name='plate'
-                    label="Color del vehículo"
-                    multiline
-                    numberOfLines={5}
-                    value={values.plate}
-                    handleChange={handleChange}
-                    error={errors.plate}
-                  /> */}
+                    <Input
+                      name='plate'
+                      label="Color del vehículo"
+                      multiline
+                      numberOfLines={5}
+                      value={values.plate}
+                      handleChange={handleChange}
+                      error={errors.plate}
+                    /> */}
 
-             
-                  <View paddingVertical={5} />
-                  <Button
-                    label="REGISTRAR"
-                    handlePress={handleSubmit}
-                  />
-                  <View paddingVertical={20} />
-                </>
-              )}
-          </Formik>
-        </View>
-      </ScrollView>
+              
+                    <View paddingVertical={5} />
+                    <Button
+                      label="REGISTRAR"
+                      handlePress={handleSubmit}
+                    />
+                    <View paddingVertical={20} />
+                  </>
+                )}
+            </Formik>
+          </View>
+        </ScrollView>
+      </View>
     )
   }
 }

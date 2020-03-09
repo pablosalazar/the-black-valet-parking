@@ -2,6 +2,8 @@ import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import { View, Text, StyleSheet } from 'react-native';
 
+
+
 const Select = (props) => {
   const {
     name,
@@ -9,8 +11,14 @@ const Select = (props) => {
     value,
     items,
     handleChange,
-    error
+    error,
+    editable
   } = props;
+
+  let disabled = false;
+  if ( editable === false) {
+    disabled = true
+  }
 
   return (
     <>
@@ -24,10 +32,12 @@ const Select = (props) => {
         }}
         value={value}
         mode="dialog"
-        style={styles}
+        style={disabled ? disabledInputStyles : inputStyles}
         useNativeAndroidPickerStyle={false}
         items={items}
+        disabled={editable === false ? true : false}
         Icon={() => {
+          if(disabled) return null;
           return (
             <View
               style={{
@@ -63,6 +73,9 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#c43d4b', 
   },
+})
+
+const inputStyles = StyleSheet.create({
   inputIOS: {
     backgroundColor: '#1b191b',
     fontSize: 16,
@@ -84,3 +97,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+
+const disabledInputStyles = StyleSheet.create({
+  inputIOS: {
+    backgroundColor: '#000',
+    fontSize: 16,
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(185,135,0,.6)',
+    color: '#fff',
+    borderRadius: 10,
+  },
+  inputAndroid: {
+    backgroundColor: '#000',
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 11,
+    borderWidth: 1,
+    borderColor: 'rgba(185,135,0,.6)',   
+    color: '#fff',
+    borderRadius: 10,
+  },
+});
+
