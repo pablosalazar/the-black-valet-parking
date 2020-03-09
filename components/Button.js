@@ -4,12 +4,12 @@ import { StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Button = (props) => {
-  const { label, handleSubmit } = props; 
+  const { label, handlePress } = props; 
   return (
     <ButtonRNE
       buttonStyle={styles.buttonPrimary}
       title={label}
-      onPress={handleSubmit}
+      onPress={handlePress}
     />
   );
 };

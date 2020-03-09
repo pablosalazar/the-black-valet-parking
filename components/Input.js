@@ -7,8 +7,9 @@ const Input = (props) => {
     label, 
     value, 
     error, 
-    handleChange, 
+    handleChange,
   } = props;
+
 
   return (
     <View style={styles.containerInput}>

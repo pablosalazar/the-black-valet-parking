@@ -12,6 +12,12 @@ export default ChooseCustomer = ({route, navigation}) => {
     customerSelected: customerList[index],
    });
   }
+
+  const goToSearchCustomer = () => {
+    navigation.navigate('SearchCustomer', {
+      vehicleSelected,
+     });
+  }
   
   return (
     <View style={{flex: 1, paddingHorizontal: 30 }}>
@@ -38,6 +44,7 @@ export default ChooseCustomer = ({route, navigation}) => {
               icon={{ name: 'plus', color: '#b98700', type: 'material-community' }} 
             />
           }
+          onPress={goToSearchCustomer}
           bottomDivider
           chevron
         />

@@ -6,16 +6,21 @@ import { Formik } from 'formik';
 import { Button, Input, Select, Loader } from '../../components';
 
 //API
-import { registerCustomer } from '../../API/CusotmerService';
+import { registerCustomer } from '../../API/CustomerService';
 import { registerVehicle } from '../../API/VehicleService';
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
+  name: Yup
+    .string()
     .required('Este campo es requerido'),
-  document_type: Yup.string()
+  document_type: Yup
+    .string()
     .required('Este campo es requerido'),
-  document_number: Yup.string()
-    .label('Número de documento')
+  document_number: Yup
+    .number()
+    .typeError('Ingrese solo números')
+    .positive('No ingrese simbolos')
+    .min(12)
     .required('Este campo es requerido'),
   phone: Yup.string()
     .label('Telefono')
@@ -47,36 +52,23 @@ const brand_list = [
 export default class Entries extends Component {
   constructor(props) {
     super(props);
-    const { route: { params: { vehicleSelected, customerSelected }} } = props;
+    const { route: { params: { plate, vehicleSelected, customerSelected, document_number }} } = props;
+    
     this.state = {
       data: {
         name: customerSelected ? customerSelected.name : '',
         document_type: customerSelected ? customerSelected.document_type : '',
-        document_number: customerSelected ? customerSelected.document_number : '',
+        document_number: customerSelected ? customerSelected.document_number : (document_number ? document_number : ''),
         phone: customerSelected ? customerSelected.phone : '',
-        plate: vehicleSelected ? vehicleSelected.plate : '',
+        plate: vehicleSelected ? vehicleSelected.plate : (plate ? plate: ''),
         brand: vehicleSelected ? vehicleSelected.brand : '',
         color: vehicleSelected ? vehicleSelected.color : '',
       },
       error: null,
-      isLoading: true,
+      isLoading: false,
     };
   }
 
-  componentDidMount() {
-    const { data } = this.state;
-    const { route: { params: { customerSelected }} } = this.props;
-    this.setState({
-      data: {
-        ...data,
-        name: customerSelected.name,
-        document_type: customerSelected.document_type,
-        document_number: customerSelected.document_number,
-        phone: customerSelected.phone,
-      },
-      isLoading: false,
-    })
-  }
 
   handleSubmit = async (data) => {
     try {
@@ -95,7 +87,7 @@ export default class Entries extends Component {
   }
 
   render() {
-    const { data, error, isLoading } = this.state;
+    const { vehicleSelected, customerSelected, data, error, isLoading } = this.state;
     
     return (
       <ScrollView>
@@ -107,7 +99,7 @@ export default class Entries extends Component {
               onSubmit={values => {this.handleSubmit(values)}}
               validationSchema={validationSchema}
             >
-              {({ handleChange, values, handleSubmit, errors, isValid, isSubmitting, touched, handleBlur }) => (
+              {({ handleChange, values, handleSubmit, errors }) => (
                 <>
                   {error && <Text style={styles.title}>{error}</Text>}
                   <Text style={styles.title}>INFO CLIENTE</Text>
@@ -187,8 +179,7 @@ export default class Entries extends Component {
                   <View paddingVertical={5} />
                   <Button
                     label="REGISTRAR"
-                    handleSubmit={handleSubmit}
-                    // disabled={isLoading}
+                    handlePress={handleSubmit}
                   />
                   <View paddingVertical={20} />
                 </>

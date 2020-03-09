@@ -25,9 +25,9 @@ export async function registerCustomer(data) {
   }
 }
 
-export async function getVehicleByPlate(plate) {
+export async function getCustomerByDocumentNumber(document_number) {
   try {
-    const response = await getAxiosIntance().get('/search/term?q=' + plate);
+    const response = await getAxiosIntance().get('/search/term?q=' + document_number);
     return response.data;
   } catch (error) {
     throw error.response ? error.response.data.error : error.message;

@@ -7,6 +7,7 @@ import { Icon } from 'react-native-elements';
 import Services from "../screens/Services";
 // Entry vehicle
 import Entries from "../screens/EntryVehicles/Entries";
+import SearchCustomer from "../screens/EntryVehicles/SearchCustomer";
 import ChooseCustomer from "../screens/EntryVehicles/ChooseCustomer";
 import EntryForm from "../screens/EntryVehicles/EntryForm";
 
@@ -17,10 +18,13 @@ const EntriesStack = createStackNavigator();
 
 function EntriesStackScreen() {
   return (
-    <EntriesStack.Navigator>
-      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Registro de entrada' }}/>
+    <EntriesStack.Navigator
+      initialRouteName="Entries"
+    >
+      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Buscar vehículo' }}/>
+      <EntriesStack.Screen name="SearchCustomer" component={SearchCustomer} options={{ title: 'Buscar cliente' }}/>
       <EntriesStack.Screen name="ChooseCustomer" component={ChooseCustomer} options={{ title: 'Elige al cliente' }}/>
-      <EntriesStack.Screen name="EntryForm" component={EntryForm} options={{ title: 'Formulario' }}/>
+      <EntriesStack.Screen name="EntryForm" component={EntryForm} options={{ title: 'Ingreso vehículo' }}/>
 
     </EntriesStack.Navigator>
   );
@@ -32,7 +36,7 @@ const Tab = createBottomTabNavigator();
 export default function HomeStack() {
   return (
     <Tab.Navigator 
-      initialRouteName="Entries"
+      initialRouteName="Services"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
