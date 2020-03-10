@@ -67,7 +67,6 @@ export default class Entries extends Component {
           onChangeText={this.updateSearch}
           value={search}
           showLoading={spinner}
-          inputStyle={styles.textUppercase}
         />
 
         <Text style={styles.plate}>{search}</Text>
@@ -142,9 +141,9 @@ const styles = StyleSheet.create({
     color: '#b98700',
     fontWeight: "400",
     fontSize: 36,
-    textTransform: 'uppercase',
     textAlign: 'center',
     marginVertical: 10,
+    textTransform: 'uppercase'
   },
   found: {
     color: '#969696',
@@ -157,11 +156,9 @@ const styles = StyleSheet.create({
     width: 100,
     height: 40,
     fontSize: 20,
-    
   },
   textUppercase: {
     textTransform: 'uppercase',
-    color: '#ffffff'
   }
 })
 

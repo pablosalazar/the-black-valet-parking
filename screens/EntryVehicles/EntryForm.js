@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView, Alert } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Alert, Button } from 'react-native';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-// import AwesomeAlert from 'react-native-awesome-alerts';
 
-import { Button, Input, Select, Loader } from '../../components';
+import { Input, Select, Loader } from '../../components';
+// import { Button, Input, Select, Loader } from '../../components';
 
 //API
 import { registerCustomer } from '../../API/CustomerService';
@@ -61,7 +61,7 @@ export default class Entries extends Component {
         document_type: customerSelected ? customerSelected.document_type : '',
         document_number: customerSelected ? customerSelected.document_number : (document_number ? document_number : ''),
         phone: customerSelected ? customerSelected.phone : '',
-        plate: vehicleSelected ? vehicleSelected.plate : (plate ? plate: ''),
+        plate: vehicleSelected ? vehicleSelected.plate.toUpperCase() : (plate.toUpperCase() ? plate.toUpperCase(): ''),
         brand: vehicleSelected ? vehicleSelected.brand : '',
         color: vehicleSelected ? vehicleSelected.color : '',
       },
@@ -120,12 +120,11 @@ export default class Entries extends Component {
             {error && <Text>{error}</Text>}
             <Formik
                 initialValues={data}
-                onSubmit={values => {this.handleSubmit(values)}}
                 validationSchema={validationSchema}
+                onSubmit={values => {this.handleSubmit(values)}}
               >
-                {({ handleChange, values, handleSubmit, errors }) => (
+                {({ values, errors, handleChange, handleSubmit, isSubmitting  }) => (
                   <>
-                    {this.launchAlert(errors)}
                     {error && <Text style={styles.title}>{error}</Text>}
                     <Text style={styles.title}>INFO CLIENTE</Text>
                     <Input
@@ -172,6 +171,7 @@ export default class Entries extends Component {
                       handleChange={handleChange}
                       error={errors.plate}
                       editable={isVehicleExisting ? false : true }
+                      autoCapitalize="characters"
                     />
 
                     <Select
@@ -207,9 +207,14 @@ export default class Entries extends Component {
 
               
                     <View paddingVertical={5} />
-                    <Button
+                    {isSubmitting && this.launchAlert(errors)}
+                    {/* <Button
                       label="REGISTRAR"
                       handlePress={handleSubmit}
+                    /> */}
+                    <Button
+                      title="Enviar"
+                      onPress={() => handleSubmit()}
                     />
                     <View paddingVertical={20} />
                   </>
