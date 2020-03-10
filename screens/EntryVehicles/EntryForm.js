@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView, Alert, Button } from 'react-native'
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import { Input, Select, Loader } from '../../components';
+import { Input, Select, Loader, AlertCustom } from '../../components';
 // import { Button, Input, Select, Loader } from '../../components';
 
 //API
@@ -123,7 +123,6 @@ export default class Entries extends Component {
         <ScrollView ref='_scrollView'>
           <View style={{flex: 1, paddingHorizontal: 30 }}>
             {isLoading && <Loader />}
-            {error && <Text>{error}</Text>}
             <Formik
                 initialValues={data}
                 validationSchema={validationSchema}
@@ -131,7 +130,7 @@ export default class Entries extends Component {
               >
                 {({ values, errors, handleChange, handleSubmit, isSubmitting  }) => (
                   <>
-                    {error && <Text style={styles.title}>{error}</Text>}
+                    {error &&  <AlertCustom error={error} />}
                     <Text style={styles.title}>INFO CLIENTE</Text>
                     <Input
                       name='name'
