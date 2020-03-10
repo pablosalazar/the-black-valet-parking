@@ -16,7 +16,7 @@ function getAxiosIntance() {
   
 }
 
-export async function registerVehicle(data) {
+export async function createVehicle(data) {
   try {
     const response = await getAxiosIntance().post('', data);
     return response.data;

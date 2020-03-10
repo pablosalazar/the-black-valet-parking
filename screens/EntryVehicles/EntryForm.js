@@ -7,8 +7,8 @@ import { Input, Select, Loader } from '../../components';
 // import { Button, Input, Select, Loader } from '../../components';
 
 //API
-import { registerCustomer } from '../../API/CustomerService';
-import { registerVehicle } from '../../API/VehicleService';
+import { createCustomer, updateCustomer } from '../../API/CustomerService';
+import { createVehicle } from '../../API/VehicleService';
 
 const validationSchema = Yup.object().shape({
   name: Yup
@@ -71,21 +71,27 @@ export default class Entries extends Component {
       isLoading: false,
     };
     this.isAlertShowed = false;
-    this.myRef = React.createRef();
   }
 
 
   handleSubmit = async (data) => {
+    const { route: { params: { customerSelected }} } = this.props;
     try {
       this.setState({ isLoading: true });
-      const customer = await registerCustomer(data);
-      const vehicle = await registerVehicle({
-        ...data,
-        customer_id: customer.id,
-      });
+      let customer = {};
+      if (customerSelected) {
+        customer = await updateCustomer(customerSelected.id, data);
+      } else {
+        customer = await createCustomer(data);
+      }
+      
+      // const vehicle = await createVehicle({
+      //   ...data,
+      //   customer_id: customer.id,
+      // });
       
     } catch (error) {
-      this.setState( error );
+      this.setState({ error }, () => this.refs._scrollView.scrollTo({x: 0, y: 0, animated: true}));
     } finally {
       this.setState({ isLoading: false });
     }
@@ -111,7 +117,7 @@ export default class Entries extends Component {
 
   render() {
     const { isCustomerExisting, isVehicleExisting, data, error, isLoading } = this.state;
-    
+  
     return (
       <View>
         <ScrollView ref='_scrollView'>
@@ -121,7 +127,7 @@ export default class Entries extends Component {
             <Formik
                 initialValues={data}
                 validationSchema={validationSchema}
-                onSubmit={values => {this.handleSubmit(values)}}
+                onSubmit={values => this.handleSubmit(values)}
               >
                 {({ values, errors, handleChange, handleSubmit, isSubmitting  }) => (
                   <>
@@ -214,7 +220,7 @@ export default class Entries extends Component {
                     /> */}
                     <Button
                       title="Enviar"
-                      onPress={() => handleSubmit()}
+                      onPress={handleSubmit}
                     />
                     <View paddingVertical={20} />
                   </>
