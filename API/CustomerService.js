@@ -16,10 +16,19 @@ function getAxiosIntance() {
   return axiosInstance;
 }
 
-export async function registerCustomer(data) {
+export async function createCustomer(data) {
   try {
     const response = await getAxiosIntance().post('', data);
     return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data.error : error.message;
+  }
+}
+
+export async function updateCustomer(id, customer) {
+  try {
+    const data  = await getAxiosIntance().put(`/${id}`, customer);
+    return data.data;
   } catch (error) {
     throw error.response ? error.response.data.error : error.message;
   }
