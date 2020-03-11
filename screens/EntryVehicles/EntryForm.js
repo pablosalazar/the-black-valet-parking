@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, ScrollView, Alert, Button } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Alert, SafeAreaView } from 'react-native';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import { Input, Select, Loader, AlertCustom } from '../../components';
-// import { Button, Input, Select, Loader } from '../../components';
+import { Button, Input, Select, Loader, Autocomplete } from '../../components';
 
 //API
 import { createCustomer, updateCustomer } from '../../API/CustomerService';
@@ -119,7 +118,7 @@ export default class Entries extends Component {
     const { isCustomerExisting, isVehicleExisting, data, error, isLoading } = this.state;
   
     return (
-      <View>
+      <SafeAreaView style={{ flex: 1 }}>
         <ScrollView ref='_scrollView'>
           <View style={{flex: 1, paddingHorizontal: 30 }}>
             {isLoading && <Loader />}
@@ -198,36 +197,34 @@ export default class Entries extends Component {
                       editable={isVehicleExisting ? false : true }
                     />
 
-                    {/* <Text style={styles.title}>ESTADO VEHÍCULO</Text>
-
+                    <Text style={styles.title}>PUNTO DE SERVICIO</Text>
+                    <Autocomplete />
+                    
+                    <Text style={styles.title}>OBSERVACIONES</Text>
                     <Input
-                      name='plate'
-                      label="Color del vehículo"
+                      name='observations'
                       multiline
                       numberOfLines={5}
-                      value={values.plate}
+                      value={values.observations}
                       handleChange={handleChange}
-                      error={errors.plate}
-                    /> */}
+                      error={errors.observations}
+                    />
 
               
                     <View paddingVertical={5} />
                     {isSubmitting && this.launchAlert(errors)}
-                    {/* <Button
+                    <Button
                       label="REGISTRAR"
                       handlePress={handleSubmit}
-                    /> */}
-                    <Button
-                      title="Enviar"
-                      onPress={handleSubmit}
                     />
+                   
                     <View paddingVertical={20} />
                   </>
                 )}
             </Formik>
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     )
   }
 }

@@ -18,6 +18,7 @@ const Input = (props) => {
         name={name}
         value={value}
         onChangeText={handleChange(name)}
+        placeholderTextColor='#969696'
         style={editable !== false ? styles.textInput : [ styles.textInput, styles.readOnly]}
         {...props}
       />
@@ -37,15 +38,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#1b191b',    
     color: '#fff',
     paddingTop: 14,
-    paddingBottom: 8,
+    paddingBottom:  Platform.OS === 'ios' ? 14 : 8,
     paddingLeft: 15,
     borderWidth: 1,
-    borderColor: 'rgba(185,135,0,.6)',
+    borderColor: '#969696',
     fontSize: 16,
     borderRadius: 10,
   },
   readOnly: {
-    backgroundColor: '#000',    
+    // backgroundColor: '#000',    
   },
   label: {
     color: "#969696",

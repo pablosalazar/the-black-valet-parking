@@ -65,7 +65,7 @@ export default class SearchCustomer extends Component {
   
     return (
       <View style={{flex: 1, paddingHorizontal: 30 }}>
-        <Text style={styles.title}>PASO 2 - PLACA {plate}</Text>
+        <Text style={styles.title}>PASO 2</Text>
         <SearchBar
           placeholder="Número de documento..."
           onChangeText={this.updateSearch}
