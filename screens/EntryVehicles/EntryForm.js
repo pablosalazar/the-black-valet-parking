@@ -8,6 +8,7 @@ import { Button, Input, Select, Loader, Autocomplete } from '../../components';
 //API
 import { createCustomer, updateCustomer } from '../../API/CustomerService';
 import { createVehicle } from '../../API/VehicleService';
+import { getPlaces } from '../../API/PlaceService';
 
 const validationSchema = Yup.object().shape({
   name: Yup
@@ -34,6 +35,8 @@ const validationSchema = Yup.object().shape({
   color: Yup.string()
     .label('Color')
     .required('Este campo es requerido'),
+  place_id: Yup.string()
+    .required('Selecciona un punto de servicio valido'),
 })
 
 const document_type_list = [
@@ -63,37 +66,54 @@ export default class Entries extends Component {
         plate: vehicleSelected ? vehicleSelected.plate.toUpperCase() : (plate.toUpperCase() ? plate.toUpperCase(): ''),
         brand: vehicleSelected ? vehicleSelected.brand : '',
         color: vehicleSelected ? vehicleSelected.color : '',
+        place_id: ''
       },
       isVehicleExisting: vehicleSelected ? true : false,
       isCustomerExisting: customerSelected ? true : false,
       error: null,
+      items: [],
       isLoading: false,
     };
     this.isAlertShowed = false;
   }
 
-
-  handleSubmit = async (data) => {
-    const { route: { params: { customerSelected }} } = this.props;
+  componentDidMount = async () => {
     try {
       this.setState({ isLoading: true });
-      let customer = {};
-      if (customerSelected) {
-        customer = await updateCustomer(customerSelected.id, data);
-      } else {
-        customer = await createCustomer(data);
-      }
-      
-      // const vehicle = await createVehicle({
-      //   ...data,
-      //   customer_id: customer.id,
-      // });
-      
+      const places = await getPlaces();
+
+      this.setState({ items: places });
     } catch (error) {
-      this.setState({ error }, () => this.refs._scrollView.scrollTo({x: 0, y: 0, animated: true}));
+      
     } finally {
       this.setState({ isLoading: false });
     }
+
+  }
+
+
+  handleSubmit = async (data) => {
+    console.log(data);
+    // const { route: { params: { customerSelected }} } = this.props;
+    // try {
+    //   this.setState({ isLoading: true });
+    //   let customer = {};
+    //   if (customerSelected) {
+    //     customer = await updateCustomer(customerSelected.id, data);
+    //   } else {
+    //     customer = await createCustomer(data);
+    //   }
+      
+    //   // const vehicle = await createVehicle({
+    //   //   ...data,
+    //   //   customer_id: customer.id,
+    //   // });
+      
+    // } catch (error) {
+    //   this.setState({ error }, () => this.refs._scrollView.scrollTo({x: 0, y: 0, animated: true}));
+    // } finally {
+    //   this.setState({ isLoading: false });
+    // }
   }
 
   launchAlert = (errors) => {
@@ -115,11 +135,11 @@ export default class Entries extends Component {
   }
 
   render() {
-    const { isCustomerExisting, isVehicleExisting, data, error, isLoading } = this.state;
-  
+    const { isCustomerExisting, isVehicleExisting, data, items, error, isLoading } = this.state;
+    console.log(data);
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView ref='_scrollView'>
+        <ScrollView ref='_scrollView' keyboardShouldPersistTaps="handled">
           <View style={{flex: 1, paddingHorizontal: 30 }}>
             {isLoading && <Loader />}
             <Formik
@@ -127,7 +147,7 @@ export default class Entries extends Component {
                 validationSchema={validationSchema}
                 onSubmit={values => this.handleSubmit(values)}
               >
-                {({ values, errors, handleChange, handleSubmit, isSubmitting  }) => (
+                {({ values, errors, handleChange, handleSubmit, isSubmitting, setFieldValue }) => (
                   <>
                     {error &&  <AlertCustom error={error} />}
                     <Text style={styles.title}>INFO CLIENTE</Text>
@@ -198,7 +218,12 @@ export default class Entries extends Component {
                     />
 
                     <Text style={styles.title}>PUNTO DE SERVICIO</Text>
-                    <Autocomplete />
+                    <Autocomplete
+                      name="place_id"
+                      items={items}
+                      error={errors.place_id}
+                      handleChange={setFieldValue}
+                    />
                     
                     <Text style={styles.title}>OBSERVACIONES</Text>
                     <Input
