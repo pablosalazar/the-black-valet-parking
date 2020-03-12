@@ -6,10 +6,9 @@ import {
   StyleSheet,
   KeyboardAvoidingView
 } from 'react-native';
-import { Button } from 'react-native-elements'
 import * as Yup from 'yup'
 import { Formik } from 'formik';
-import Input from '../components/Input';
+import { Input, Button, Loader } from '../components/index';
 import AppContext from '../AppContext';
 import { loginUser } from '../API/AuthService';
 
@@ -42,9 +41,8 @@ export default function SignIn() {
       } else {
         setError('Error inesperado');
       }
-    } finally {
       setIsLoading(false);
-    }
+    } 
   }
 
   return (
@@ -73,31 +71,32 @@ export default function SignIn() {
               <Input 
                 name="login"
                 value={values.login}
-                placeholder="Ingresa tu usuario o correo electrónico"
+                placeholder="Usuario o correo electrónico"
                 autoCapitalize='none'
                 handleChange={handleChange}
+                lIcon="account-outline"
                 error={errors.login}
               />
 
               <Input 
                 name="password"
                 value={values.password}
-                placeholder="Ingresa tu contraseña"
+                placeholder="Contraseña"
                 autoCapitalize='none'
                 secureTextEntry
                 handleChange={handleChange}
+                lIcon="lock-outline"
                 error={errors.password}
               />
               {isLoading &&
-                  <Text style={styles.textPrimary}>Procesando ...</Text>
+                <Loader loading={isLoading} />
               }
-              {!isLoading &&
-                <Button
-                  buttonStyle={styles.buttonPrimary}
-                  title="ENTRAR"
-                  onPress={handleSubmit}
-                />
-              }
+              <Button
+                buttonStyle={styles.buttonPrimary}
+                label="ENTRAR"
+                handlePress={handleSubmit}
+              />
+              
             </>
           )}
         </Formik>

@@ -70,7 +70,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: '#c43d4b',
-    marginBottom: 0,
+    fontSize: 12,
+    paddingHorizontal: 5,
+    paddingVertical: 8,
   },
 })
 

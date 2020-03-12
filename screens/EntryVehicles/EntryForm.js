@@ -136,7 +136,7 @@ export default class Entries extends Component {
 
   render() {
     const { isCustomerExisting, isVehicleExisting, data, items, error, isLoading } = this.state;
-    console.log(data);
+    
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView ref='_scrollView' keyboardShouldPersistTaps="handled">
@@ -166,7 +166,7 @@ export default class Entries extends Component {
                       value={values.document_type}
                       handleChange={handleChange}
                       error={errors.document_type}
-                      editable={isCustomerExisting ? false : true }
+                      disabled={isCustomerExisting ? true : false }
                     />
                     
                     <Input
@@ -175,7 +175,7 @@ export default class Entries extends Component {
                       value={values.document_number}
                       handleChange={handleChange}
                       error={errors.document_number}
-                      editable={isCustomerExisting ? false : true }
+                      disabled={isCustomerExisting ? true : false }
                     />
 
                     <Input
@@ -194,7 +194,7 @@ export default class Entries extends Component {
                       value={values.plate}
                       handleChange={handleChange}
                       error={errors.plate}
-                      editable={isVehicleExisting ? false : true }
+                      disabled={isVehicleExisting ? true : false }
                       autoCapitalize="characters"
                     />
 
@@ -205,7 +205,7 @@ export default class Entries extends Component {
                       value={values.brand}
                       handleChange={handleChange}
                       error={errors.brand}
-                      editable={isVehicleExisting ? false : true }
+                      disabled={isVehicleExisting ? true : false }
                     />
 
                     <Input
@@ -214,7 +214,7 @@ export default class Entries extends Component {
                       value={values.color}
                       handleChange={handleChange}
                       error={errors.color}
-                      editable={isVehicleExisting ? false : true }
+                      disabled={isVehicleExisting ? true : false }
                     />
 
                     <Text style={styles.title}>PUNTO DE SERVICIO</Text>

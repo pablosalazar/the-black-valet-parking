@@ -1,7 +1,7 @@
 import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import { View, Text, StyleSheet } from 'react-native';
-
+import { Input } from './index';
 
 
 const Select = (props) => {
@@ -12,12 +12,21 @@ const Select = (props) => {
     items,
     handleChange,
     error,
-    editable
+    disabled
   } = props;
 
-  let disabled = false;
-  if ( editable === false) {
-    disabled = true
+  
+  if (disabled === true) {
+    const labelValue = items.filter(item => item.value === value )[0].label;
+    return (
+      <Input
+        label={label}
+        name={name}
+        value={labelValue || value}
+        handleChange={handleChange}
+        disabled
+      />
+    )
   }
 
   return (
@@ -32,10 +41,9 @@ const Select = (props) => {
         }}
         value={value}
         mode="dialog"
-        style={disabled ? disabledInputStyles : inputStyles}
+        style={inputStyles}
         useNativeAndroidPickerStyle={false}
         items={items}
-        disabled={editable === false ? true : false}
         Icon={() => {
           if(disabled) return null;
           return (
@@ -71,53 +79,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   errorText: {
-    color: '#c43d4b', 
+    color: '#c43d4b',
+    fontSize: 12,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
   },
 })
 
 const inputStyles = StyleSheet.create({
   inputIOS: {
-    backgroundColor: '#1b191b',
+    backgroundColor: 'rgba(255, 255, 255, .2)',
     fontSize: 16,
     paddingVertical: 15,
     paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#969696',
     color: '#fff',
     borderRadius: 10,
   },
   inputAndroid: {
-    backgroundColor: '#1b191b',
+    backgroundColor: 'rgba(255, 255, 255, .2)',
     fontSize: 16,
     paddingHorizontal: 10,
-    paddingVertical: 11,
-    borderWidth: 1,
-    borderColor: '#969696',   
+    paddingVertical: 11,   
     color: '#fff',
     borderRadius: 10,
   },
 });
-
-const disabledInputStyles = StyleSheet.create({
-  inputIOS: {
-    backgroundColor: '#000',
-    fontSize: 16,
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#969696',
-    color: '#fff',
-    borderRadius: 10,
-  },
-  inputAndroid: {
-    backgroundColor: '#000',
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 11,
-    borderWidth: 1,
-    borderColor: '#969696',   
-    color: '#fff',
-    borderRadius: 10,
-  },
-});
-
