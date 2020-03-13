@@ -3,7 +3,8 @@ import Select from './Select';
 import Button from './Button';
 import Loader from './Loader';
 import AlertCustom from './Alert';
-import Autocomplete from './Autocomplete';
+import SearcheableSelect from './SearcheableSelect';
+import WaterMark from './WaterMark';
 
 export {
   Button,
@@ -11,5 +12,6 @@ export {
   Select,
   Loader,
   AlertCustom,
-  Autocomplete,
+  SearcheableSelect,
+  WaterMark,
 };

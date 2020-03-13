@@ -1,7 +1,8 @@
 import React from 'react';
+import { Icon } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
-import { View, Text, StyleSheet } from 'react-native';
-import { Input } from './index';
+import { Text, StyleSheet } from 'react-native';
+import Input from './Input';
 
 
 const Select = (props) => {
@@ -44,26 +45,15 @@ const Select = (props) => {
         style={inputStyles}
         useNativeAndroidPickerStyle={false}
         items={items}
-        Icon={() => {
-          if(disabled) return null;
-          return (
-            <View
-              style={{
-                backgroundColor: 'transparent',
-                borderTopWidth: 6,
-                borderTopColor: '#969696',
-                borderRightWidth: 6,
-                borderRightColor: 'transparent',
-                borderLeftWidth: 6,
-                borderLeftColor: 'transparent',
-                width: 0,
-                height: 0,
-                top: 23,
-                right: 10,
-              }}
-            />
-          );
-        }}
+        Icon={() => (
+          <Icon
+            name="chevron-down"
+            type="material-community"
+            size={24}
+            color='#969696'
+            iconStyle={{top: 12, paddingRight: 10}}
+          />
+        )}
       />
       {error && <Text style={styles.errorText}>{error}</Text>}
     </>

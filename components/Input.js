@@ -1,7 +1,6 @@
 import React from 'react';
-import { Icon } from 'react-native-elements';
 import { StyleSheet } from 'react-native';
-import { Input as InputREN } from 'react-native-elements';
+import { Input as InputREN, Icon } from 'react-native-elements';
 
 const Input = (props) => {
   const { 
@@ -92,7 +91,6 @@ export default Input;
 const styles = StyleSheet.create({
   containerInput: {
     marginVertical: 6,
-    // borderWidth: 1,
     borderColor: '#969696',
     backgroundColor: 'rgba(255, 255, 255, .2)',
     borderRadius: 10,

@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Avatar, SearchBar, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale'; 
 
-import { Button } from '../../components';
+import { Button, WaterMark } from '../../components';
 import { getVehicleByPlate } from '../../API/VehicleService';
 
 export default class Entries extends Component {
@@ -70,6 +70,7 @@ export default class Entries extends Component {
         />
 
         <Text style={styles.plate}>{search}</Text>
+        {search.length === 0 && <WaterMark />}
         {search.length > 2 && (
           vehicleList.length === 0 ? (
             <>

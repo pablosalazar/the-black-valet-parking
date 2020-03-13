@@ -3,9 +3,8 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Avatar, SearchBar, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale'; 
 
-import { Button } from '../../components';
+import { Button, WaterMark } from '../../components';
 import { getCustomerByDocumentNumber } from '../../API/CustomerService';
-import { ProgressViewIOSComponent } from 'react-native';
 
 export default class SearchCustomer extends Component {
   constructor(props) {
@@ -75,6 +74,7 @@ export default class SearchCustomer extends Component {
         />
 
         <Text style={styles.plate}>{search}</Text>
+        {search.length === 0 && <WaterMark />}
         {search.length > 2 && (
           customerList.length === 0 ? (
             <>

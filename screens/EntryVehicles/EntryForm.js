@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, ScrollView, Alert, SafeAreaView } from 'react-n
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import { Button, Input, Select, Loader, Autocomplete } from '../../components';
+import { Button, Input, Select, Loader, SearcheableSelect } from '../../components';
 
 //API
 import { createCustomer, updateCustomer } from '../../API/CustomerService';
@@ -218,7 +218,7 @@ export default class Entries extends Component {
                     />
 
                     <Text style={styles.title}>PUNTO DE SERVICIO</Text>
-                    <Autocomplete
+                    <SearcheableSelect
                       name="place_id"
                       items={items}
                       error={errors.place_id}
@@ -232,6 +232,7 @@ export default class Entries extends Component {
                       numberOfLines={5}
                       value={values.observations}
                       handleChange={handleChange}
+                      placeholder="(Opcional)..."
                       error={errors.observations}
                     />
 
