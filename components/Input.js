@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     paddingHorizontal: 15,
     paddingTop: 14,
-    paddingBottom:  Platform.OS === 'ios' ? 14 : 8,
+    paddingBottom:  Platform.OS === 'ios' ? 14 : 10,
   },
   label: {
     color: "#969696",

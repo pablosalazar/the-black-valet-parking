@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Icon, SearchBar, ListItem } from 'react-native-elements';
-import { StyleSheet, ScrollView, Modal, Image, TouchableHighlight, View, Alert} from 'react-native';
-import Loader from './Loader';
-import WaterMark from './WaterMark';
-// import SearchableDropdown from 'react-native-searchable-dropdown';
+import { StyleSheet, ScrollView, Modal, Text, TouchableHighlight, View, ActivityIndicator} from 'react-native';
 
 export default class SearcheableSelect extends Component {
   constructor(props) {
@@ -11,11 +8,24 @@ export default class SearcheableSelect extends Component {
     this.state = {
       search: '',
       items: [],
-      resultsItems:props.items,
+      itemsFiltered: [],
       isListOpen: false,
       isLoading: false,
+      isListShowed: false,
+      itemSelected: null,
       ...props,
     };
+    
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps !== this.props) {
+      this.setState({
+        items: this.props.items,
+        itemsFiltered: this.props.items,
+        error: this.props.error,
+      })
+    }
   }
 
   openList = () => {
@@ -27,14 +37,22 @@ export default class SearcheableSelect extends Component {
   }
 
   updateSearch = search => {
-    this.setState({ search });
+    const { items } = this.state;
+    const itemsFiltered = items.filter((item) => item.name.includes(search))
+    this.setState({ itemsFiltered, search });
   };
 
   getListItems = () => {
+    const { itemsFiltered } = this.state;
+
+    if (itemsFiltered.length === 0) {
+      return <Text style={[styles.found, {marginTop: 20}]}>NO ENCONTRARON RESULTADOS</Text>
+    }
+
     return (
       <ScrollView>
         {
-          resultsItems.map((item, index) => (
+          itemsFiltered.map((item, index) => (
             <ListItem
               key={index}
               title={item.name}
@@ -43,7 +61,7 @@ export default class SearcheableSelect extends Component {
                 borderColor: '#3195a5',
               }}
               titleStyle={{ color: '#fff' }}
-              // onPress={() => (index)}
+              onPress={() => this.selectingItem(item.id, item.name)}
               bottomDivider
               chevron
             />
@@ -53,9 +71,24 @@ export default class SearcheableSelect extends Component {
     )
   }
 
-  render() {
-    const { search, label, name, value, error, resultsItems, isListOpen, isLoading } = this.state;
+  selectingItem = (id, value) => {
+    const { name, items } = this.state;
+    this.closeList();
+    this.setState({ 
+      isListShowed: false,
+      itemsFiltered: items,
+      value, 
+      search: ''
+    });
+    this.props.handleChange(name, id);
+    
+  }
 
+  render() {
+    const { 
+      search, label, name, value, error, isListOpen, isListShowed, items
+    } = this.state;
+    
     return (
       <>
         <TouchableHighlight onPress={this.openList}>
@@ -72,7 +105,8 @@ export default class SearcheableSelect extends Component {
             disabled={true}
             errorStyle={{ color: '#c43d4b' }}
             errorMessage={error}
-            onShow={() => this.setState({isLoading: false})}
+            onShow={() => this.setState({ isLoading: false })}
+            disabledInputStyle={{ color: '#fff',opacity:1 }}
             rightIcon={
               <Icon
                 name={isListOpen ? 'minus' : 'plus' }
@@ -84,7 +118,6 @@ export default class SearcheableSelect extends Component {
           />
         </TouchableHighlight>
 
-        <Loader loading={isLoading} />
         <Modal
           animationType="slide"
           transparent={false}
@@ -92,10 +125,11 @@ export default class SearcheableSelect extends Component {
           visible={isListOpen}
           hardwareAccelerated={true}
           onRequestClose={() => {
+            this.setState({ isListShowed: false, search: '', itemsFiltered: items });
             this.closeList();
           }}
           onShow={() => {
-            // Alert.alert('Modal has been showed.');
+            this.setState({isListShowed: true})
           }}
         >
           <View style={styles.modalBackground}>
@@ -105,9 +139,13 @@ export default class SearcheableSelect extends Component {
               onChangeText={this.updateSearch}
               value={search}
             />
-
-            {search.length === 0 && <WaterMark />}
+            {!isListShowed && (
+              <View style={{marginTop: 40}}>
+                <ActivityIndicator size="large" color="#b98700" />
+              </View>
+            )}
             
+            {isListShowed && this.getListItems()}
             
           </View>
         </Modal>
@@ -137,11 +175,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     paddingHorizontal: 15,
     paddingTop: 14,
-    paddingBottom:  Platform.OS === 'ios' ? 14 : 8,
+    paddingBottom:  Platform.OS === 'ios' ? 14 : 10,
   },
   modalBackground: {
     flex: 1,
     backgroundColor: '#000'
+  },
+  found: {
+    color: '#969696',
+    textAlign: 'center',
+    marginBottom: 20,
   },
 })
 

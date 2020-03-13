@@ -93,7 +93,7 @@ export default class Entries extends Component {
 
 
   handleSubmit = async (data) => {
-    console.log(data);
+    
     // const { route: { params: { customerSelected }} } = this.props;
     // try {
     //   this.setState({ isLoading: true });
