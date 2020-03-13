@@ -55,12 +55,11 @@ const brand_list = [
 ]
 
 export default class Entries extends Component {
-  static appContext = AppContext;
+  static contextType = AppContext
 
   constructor(props) {
     super(props);
     const { route: { params: { plate, vehicleSelected, customerSelected, document_number }} } = props;
-    
     this.state = {
       data: {
         name: customerSelected ? customerSelected.name : '',
@@ -71,9 +70,10 @@ export default class Entries extends Component {
         brand: vehicleSelected ? vehicleSelected.brand : '',
         color: vehicleSelected ? vehicleSelected.color : '',
         place_id: '',
-        employee_id: null,
-        employee: ''
+        employee_id: '',
+        employee: '',
       },
+      user: null,
       isVehicleExisting: vehicleSelected ? true : false,
       isCustomerExisting: customerSelected ? true : false,
       error: null,
@@ -84,22 +84,29 @@ export default class Entries extends Component {
   }
 
   componentDidMount = async () => {
-    const user = this.appContext;
+    const { user } = this.context;
+    const { data } = this.state;
     try {
       this.setState({ isLoading: true });
       const places = await getPlaces();
-      this.setState({ items: places });
+      this.setState({ 
+        data: {
+          ...data,
+          employee_id: user.employee_id,
+        },
+        user: user,
+        items: places,
+      });
     } catch (error) {
-      
+      this.setState({ error: 'Se presento un error al cargar los puntos de servicios'})
     } finally {
       this.setState({ isLoading: false });
     }
 
   }
 
-
   handleSubmit = async (data) => {
-    
+    console.log(data);
     // const { route: { params: { customerSelected }} } = this.props;
     // try {
     //   this.setState({ isLoading: true });
@@ -141,14 +148,14 @@ export default class Entries extends Component {
   }
 
   render() {
-    const { isCustomerExisting, isVehicleExisting, data, items, error, isLoading } = this.state;
+    const { user, isCustomerExisting, isVehicleExisting, data, items, error, isLoading } = this.state;
     
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView ref='_scrollView' keyboardShouldPersistTaps="handled">
           <View style={{flex: 1, paddingHorizontal: 30 }}>
             {isLoading && <Loader />}
-            <Formik
+            {user && <Formik
                 initialValues={data}
                 validationSchema={validationSchema}
                 onSubmit={values => this.handleSubmit(values)}
@@ -241,14 +248,15 @@ export default class Entries extends Component {
                       placeholder="(Opcional)..."
                       error={errors.observations}
                     />
-
+                    
                     <Text style={styles.title}>RESPONSABLE</Text>
                     <Input
-                      name='employee_id'
-                      value={values.observations}
+                      name='employee'
+                      value={user.full_name}
                       handleChange={handleChange}
                       disabled={true}
                     />
+                    <Text style={styles.helpText}>Cargo: {user.job_title}</Text>
               
                     <View paddingVertical={5} />
                     {isSubmitting && this.launchAlert(errors)}
@@ -260,7 +268,7 @@ export default class Entries extends Component {
                     <View paddingVertical={20} />
                   </>
                 )}
-            </Formik>
+            </Formik>}
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -309,5 +317,11 @@ const styles = StyleSheet.create({
     color: '#b98700',
     textAlign: 'center'
   },
+  helpText: {
+    color: '#969696',
+    top: -5,
+    // textAlign: "right",
+    fontSize: 12,
+  }
 })
 
