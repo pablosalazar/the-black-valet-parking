@@ -48,6 +48,12 @@ export default function App() {
             userToken: null,
             user: null,
           };
+
+        case 'LOAD_USER':
+          return {
+            ...prevState,
+            user: action.user,
+          }
       }
     },
     {
@@ -70,6 +76,7 @@ export default function App() {
         // Restoring token failed
       }
       dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({ type: 'LOAD_USER', user: JSON.parse(user) });
     };
 
     bootstrapAsync();
@@ -81,6 +88,7 @@ export default function App() {
         userToken = await AsyncStorage.getItem('access_token');
         user = await AsyncStorage.getItem('user');
         dispatch({ type: 'SIGN_IN', token: userToken, user });
+        dispatch({ type: 'LOAD_USER', user: JSON.parse(user) });
       },
       signOut: () => {
         AsyncStorage.removeItem('access_token');
@@ -97,7 +105,7 @@ export default function App() {
   }
   
   return (
-    <AppContext.Provider value={appContext}>
+    <AppContext.Provider value={{...appContext, user: state.user}}>
       <NavigationContainer theme={DarkTheme}>
         {state.userToken === null ? (
           <AuthStack />

@@ -42,8 +42,8 @@ export default class SearcheableSelect extends Component {
     this.setState({ itemsFiltered, search });
   };
 
-  getListItems = () => {
-    const { itemsFiltered } = this.state;
+  renderItems = () => {
+    const { itemsFiltered, search } = this.state;
 
     if (itemsFiltered.length === 0) {
       return <Text style={[styles.found, {marginTop: 20}]}>NO ENCONTRARON RESULTADOS</Text>
@@ -73,7 +73,6 @@ export default class SearcheableSelect extends Component {
 
   selectingItem = (id, value) => {
     const { name, items } = this.state;
-    this.closeList();
     this.setState({ 
       isListShowed: false,
       itemsFiltered: items,
@@ -81,7 +80,7 @@ export default class SearcheableSelect extends Component {
       search: ''
     });
     this.props.handleChange(name, id);
-    
+    this.closeList();
   }
 
   render() {
@@ -145,7 +144,7 @@ export default class SearcheableSelect extends Component {
               </View>
             )}
             
-            {isListShowed && this.getListItems()}
+            {isListShowed && this.renderItems()}
             
           </View>
         </Modal>

@@ -2,12 +2,11 @@ import * as React from 'react';
 import { View, Text, Button } from 'react-native';
 import AppContext from '../AppContext';
 
-export default function Profile() {
-  const { signOut } = React.useContext(AppContext);
-
+const Profile = () => {
+  const { user, signOut } = React.useContext(AppContext);  
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{color: '#ffffff'}}>Profile Screen</Text>
+      <Text style={{color: '#ffffff'}}>{user.full_name}</Text>
       <Button
         title="Salir"
         onPress={() => signOut()}
@@ -15,3 +14,6 @@ export default function Profile() {
     </View>
   )
 }
+
+export default Profile;
+

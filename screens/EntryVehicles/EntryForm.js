@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, ScrollView, Alert, SafeAreaView } from 'react-n
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
+import AppContext from '../../AppContext'
+
 import { Button, Input, Select, Loader, SearcheableSelect } from '../../components';
 
 //API
@@ -53,6 +55,8 @@ const brand_list = [
 ]
 
 export default class Entries extends Component {
+  static appContext = AppContext;
+
   constructor(props) {
     super(props);
     const { route: { params: { plate, vehicleSelected, customerSelected, document_number }} } = props;
@@ -66,7 +70,9 @@ export default class Entries extends Component {
         plate: vehicleSelected ? vehicleSelected.plate.toUpperCase() : (plate.toUpperCase() ? plate.toUpperCase(): ''),
         brand: vehicleSelected ? vehicleSelected.brand : '',
         color: vehicleSelected ? vehicleSelected.color : '',
-        place_id: ''
+        place_id: '',
+        employee_id: null,
+        employee: ''
       },
       isVehicleExisting: vehicleSelected ? true : false,
       isCustomerExisting: customerSelected ? true : false,
@@ -78,10 +84,10 @@ export default class Entries extends Component {
   }
 
   componentDidMount = async () => {
+    const user = this.appContext;
     try {
       this.setState({ isLoading: true });
       const places = await getPlaces();
-
       this.setState({ items: places });
     } catch (error) {
       
@@ -236,6 +242,13 @@ export default class Entries extends Component {
                       error={errors.observations}
                     />
 
+                    <Text style={styles.title}>RESPONSABLE</Text>
+                    <Input
+                      name='employee_id'
+                      value={values.observations}
+                      handleChange={handleChange}
+                      disabled={true}
+                    />
               
                     <View paddingVertical={5} />
                     {isSubmitting && this.launchAlert(errors)}
