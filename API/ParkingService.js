@@ -8,7 +8,7 @@ async function init() {
 
 function getAxiosIntance() {
   const axiosInstance = axios.create({
-    baseURL: `${API_URL}/services`,
+    baseURL: `${API_URL}/parking-services`,
     headers: {
       Authorization: `Bearer ${ACCESS_TOKEN}`,
     }
@@ -16,7 +16,7 @@ function getAxiosIntance() {
   return axiosInstance;
 }
 
-export async function createService(data) {
+export async function createParkingService(data) {
   try {
     const response = await getAxiosIntance().post('', data);
     return response.data;

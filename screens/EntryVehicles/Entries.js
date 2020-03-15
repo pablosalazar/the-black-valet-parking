@@ -67,6 +67,7 @@ export default class Entries extends Component {
           onChangeText={this.updateSearch}
           value={search}
           showLoading={spinner}
+          autoCapitalize='characters'
         />
 
         <Text style={styles.plate}>{search}</Text>

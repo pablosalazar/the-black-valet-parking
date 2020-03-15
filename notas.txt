@@ -4,3 +4,4 @@ revisar la app cuando el api esta caido (la app no muestra ninguna señal de que
 mejorar los nombres de los screen de entries
 *importan: consultas se mandan paginadas.
 * revisar como manejar puntos de recepcion y establecimientos
+algunos campos de formulario puedo porner la opcion de capitalizar palabras para casos como el nombre,

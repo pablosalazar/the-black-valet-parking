@@ -5,11 +5,12 @@ import { Formik } from 'formik';
 
 import AppContext from '../../AppContext'
 
-import { Button, Input, Select, Loader, SearcheableSelect } from '../../components';
+import { Button, Input, Select, Loader, SearcheableSelect, AlertCustom } from '../../components';
 
 //API
 import { createCustomer, updateCustomer } from '../../API/CustomerService';
 import { createVehicle } from '../../API/VehicleService';
+import { createParkingService } from '../../API/ParkingService';
 import { getPlaces } from '../../API/PlaceService';
 
 const validationSchema = Yup.object().shape({
@@ -106,27 +107,54 @@ export default class Entries extends Component {
   }
 
   handleSubmit = async (data) => {
-    console.log(data);
-    // const { route: { params: { customerSelected }} } = this.props;
-    // try {
-    //   this.setState({ isLoading: true });
-    //   let customer = {};
-    //   if (customerSelected) {
-    //     customer = await updateCustomer(customerSelected.id, data);
-    //   } else {
-    //     customer = await createCustomer(data);
-    //   }
+    const { route: { params: { customerSelected, vehicleSelected }} } = this.props;
+    try {
+      this.setState({ isLoading: true });
+      // REGISTER CUSTOMER
+      let customer = {};
+      if (customerSelected) {
+        customer = await updateCustomer(customerSelected.id, data);
+      } else {
+        customer = await createCustomer(data);
+      }
+      // REGISTER VEHICULO
+      let vehicle = null;
+      if (vehicleSelected) {
+        vehicle = vehicleSelected;
+      } else {
+        vehicle = await createVehicle({
+          ...data,
+          customer_id: customer.id,
+        });
+      }
+
+      // REGISTER SERVICE
+      let parkingServiceData = {
+        customer_id: customer.id,
+        vehicle_id: vehicle.id,
+        place_id: data.place_id,
+        employee_id: data.employee_id,
+      };
+
+      const parkingService = await createParkingService(parkingServiceData);
+
+      Alert.alert(
+        'OPERACION EXITOSA',
+        'El servicio para ha sido registrado con exito | serial: ' + parkingService.serial,
+        [
+          {text: 'OK', onPress: () => {
+            this.props.navigation.navigate('Services');
+          }},
+        ],
+        {cancelable: false},
+      );
       
-    //   // const vehicle = await createVehicle({
-    //   //   ...data,
-    //   //   customer_id: customer.id,
-    //   // });
       
-    // } catch (error) {
-    //   this.setState({ error }, () => this.refs._scrollView.scrollTo({x: 0, y: 0, animated: true}));
-    // } finally {
-    //   this.setState({ isLoading: false });
-    // }
+    } catch (error) {
+      this.setState({ error }, () => this.refs._scrollView.scrollTo({x: 0, y: 0, animated: true}));
+    } finally {
+      this.setState({ isLoading: false });
+    }
   }
 
   launchAlert = (errors) => {
