@@ -8,9 +8,11 @@ import {
 } from 'react-native';
 import * as Yup from 'yup'
 import { Formik } from 'formik';
-import { Input, Button, Loader } from '../components/index';
-import AppContext from '../AppContext';
-import { loginUser } from '../API/AuthService';
+import { Input, Button, Loader, AlertCustom, Link } from '../../components/index';
+import AppContext from '../../AppContext';
+import { loginUser } from '../../API/AuthService';
+
+import theBlackTheme from '../../constants/Theme';
 
 const validationSchema = Yup.object().shape({
   login: Yup.string()
@@ -28,7 +30,7 @@ export default function SignIn() {
   const [error, setError] = React.useState(null);
 
   const { signIn } = React.useContext(AppContext);
-
+  
   const handleSubmit = async (values) => {
     try {
       setIsLoading(true);
@@ -51,16 +53,12 @@ export default function SignIn() {
 
         <View style={{alignItems: 'center'}}>
           <Image
-            style={{width: 180, height: 117 }}
-            source={require('../assets/images/logo.png')}
+            style={{width: 180, height: 117, marginBottom: 10 }}
+            source={require('../../assets/images/logo.png')}
           />
         </View> 
-        <Text style={styles.title}>INGRESAR</Text>
-        {error && (
-          <View style={styles.alertDanger}>
-            <Text style={styles.textDanger}>{error}</Text>
-          </View>
-        )}
+        <Text style={styles.title}>INICIAR SESION</Text>
+        {error && <AlertCustom error={error} />}
         <Formik
           initialValues={{ login: '', password: '' }}
           onSubmit={values => {handleSubmit(values)}}
@@ -68,6 +66,9 @@ export default function SignIn() {
         >
           {({ handleChange, values, handleSubmit, errors }) => (
             <>
+              {isLoading &&
+                <Loader loading={isLoading} />
+              }
               <Input 
                 name="login"
                 value={values.login}
@@ -88,14 +89,18 @@ export default function SignIn() {
                 lIcon="lock-outline"
                 error={errors.password}
               />
-              {isLoading &&
-                <Loader loading={isLoading} />
-              }
+
+              <Link
+                text="¿Olvidaste tu contraseña?"
+                goTo="RecoverPassword"
+              />
+              
               <Button
-                buttonStyle={styles.buttonPrimary}
                 label="ENTRAR"
                 handlePress={handleSubmit}
               />
+
+              <Text style={styles.text}>©2020 The Black</Text>
               
             </>
           )}
@@ -109,29 +114,14 @@ export default function SignIn() {
 const styles = StyleSheet.create({
   title: {
     textAlign: 'center',
-    color: '#b98700',
-    marginVertical: 20,
+    color: theBlackTheme.COLORS.PRIMARY,
+    marginVertical: 10,
     fontSize: 20,
   },
-  buttonPrimary: {
-    backgroundColor: "#b98700",
-    marginTop: 10,
-    paddingHorizontal: 40,
-  },
-  textDanger: {
-    paddingHorizontal: 20,
-    color: '#c43d4b',
-  },
-  alertDanger: {
-    backgroundColor: 'rgba(196, 61, 75, .2)',
-    marginBottom: 20,
-    paddingVertical: 14,
-    fontSize: 14,
-    borderWidth: 1,
-    borderColor: '#c43d4b1a',
-  },
-  textPrimary: {
-    color: '#b98700',
-    textAlign: 'center'
-  },
+  text: {
+    marginTop: 30,
+    color: "#969696",
+    textAlign: 'center',
+    fontSize: 11,
+  }
 })
