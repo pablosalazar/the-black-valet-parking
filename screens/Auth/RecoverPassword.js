@@ -70,7 +70,7 @@ export default function RecoverPassword() {
               />
 
               <Link
-                text="Volver al inicio de sesion"
+                text="Volver al inicio de sesión"
                 goTo="SignIn"
               />
 

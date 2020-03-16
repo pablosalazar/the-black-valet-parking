@@ -57,7 +57,7 @@ export default function SignIn() {
             source={require('../../assets/images/logo.png')}
           />
         </View> 
-        <Text style={styles.title}>INICIAR SESION</Text>
+        <Text style={styles.title}>INICIAR SESIÓN</Text>
         {error && <AlertCustom error={error} />}
         <Formik
           initialValues={{ login: '', password: '' }}
