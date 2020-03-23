@@ -2,13 +2,29 @@ import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 
+
 const AlertCustom = (props) => {
-  const { error, type } = props; 
+  const { error, type } = props;
+
+
+  if (typeof error === 'string') {
+    return (
+      <View style={styles.alertDanger}>
+        <Text style={styles.textDanger}>{error}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.alertDanger}>
-      <Text style={styles.textDanger}>{error}</Text>
+      <Text style={styles.textDanger}>CONFLICTOS:</Text>
+      {Object.keys(error).map((e) => {
+        return <Text style={styles.textDanger}>- {error[e]}</Text>
+      })}
     </View>
-  );
+  )
+  
+  
 };
 
 export default AlertCustom;
