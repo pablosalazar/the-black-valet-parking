@@ -11,7 +11,7 @@ import { Button, Input, Select, Loader, SearcheableSelect, AlertCustom } from '.
 import { createCustomer, updateCustomer } from '../../API/CustomerService';
 import { createVehicle } from '../../API/VehicleService';
 import { createParkingService } from '../../API/ParkingService';
-import { getPlaces } from '../../API/PlaceService';
+import { getPlaces, getServicePoints } from '../../API/PlaceService';
 
 const validationSchema = Yup.object().shape({
   name: Yup
@@ -38,7 +38,7 @@ const validationSchema = Yup.object().shape({
   color: Yup.string()
     .label('Color')
     .required('Este campo es requerido'),
-  place_id: Yup.string()
+  service_point_id: Yup.string()
     .required('Selecciona un punto de servicio valido'),
 })
 
@@ -70,7 +70,7 @@ export default class Entries extends Component {
         plate: vehicleSelected ? vehicleSelected.plate.toUpperCase() : (plate.toUpperCase() ? plate.toUpperCase(): ''),
         brand: vehicleSelected ? vehicleSelected.brand : '',
         color: vehicleSelected ? vehicleSelected.color : '',
-        place_id: '',
+        service_point_id: '',
         employee_id: '',
         employee: '',
       },
@@ -78,7 +78,8 @@ export default class Entries extends Component {
       isVehicleExisting: vehicleSelected ? true : false,
       isCustomerExisting: customerSelected ? true : false,
       error: null,
-      items: [],
+      places: [],
+      servicePoints: [],
       isLoading: false,
     };
     this.isAlertShowed = false;
@@ -89,6 +90,7 @@ export default class Entries extends Component {
     const { data } = this.state;
     try {
       this.setState({ isLoading: true });
+      const servicePoints = await getServicePoints();
       const places = await getPlaces();
       this.setState({ 
         data: {
@@ -96,7 +98,8 @@ export default class Entries extends Component {
           employee_id: user.employee_id,
         },
         user: user,
-        items: places,
+        servicePoints,
+        places,
       });
     } catch (error) {
       this.setState({ error: 'Se presento un error al cargar los puntos de servicios'})
@@ -132,6 +135,7 @@ export default class Entries extends Component {
       let parkingServiceData = {
         customer_id: customer.id,
         vehicle_id: vehicle.id,
+        service_point_id: data.service_point_id,
         place_id: data.place_id,
         employee_id: data.employee_id,
       };
@@ -167,7 +171,6 @@ export default class Entries extends Component {
         [
           {text: 'OK', onPress: () => {
             this.isAlertShowed = false;
-            this.refs._scrollView.scrollTo({x: 0, y: 0, animated: true})
           }},
         ],
         {cancelable: false},
@@ -176,7 +179,7 @@ export default class Entries extends Component {
   }
 
   render() {
-    const { user, isCustomerExisting, isVehicleExisting, data, items, error, isLoading } = this.state;
+    const { user, isCustomerExisting, isVehicleExisting, data, servicePoints, places, error, isLoading } = this.state;
     
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -258,16 +261,18 @@ export default class Entries extends Component {
                       disabled={isVehicleExisting ? true : false }
                     />
 
-                    <Text style={styles.title}>PUNTO DE SERVICIO</Text>
+                    <Text style={styles.title}>INFO DEL SERVICIO</Text>
+
                     <SearcheableSelect
+                      label="Sitio al que se dirige el cliente"
                       name="place_id"
-                      items={items}
+                      items={places}
                       error={errors.place_id}
                       handleChange={setFieldValue}
                     />
-                    
-                    <Text style={styles.title}>OBSERVACIONES</Text>
+  
                     <Input
+                      label='Observacines'
                       name='observations'
                       multiline
                       numberOfLines={5}
@@ -278,7 +283,16 @@ export default class Entries extends Component {
                     />
                     
                     <Text style={styles.title}>RESPONSABLE</Text>
+                    <SearcheableSelect
+                      label="Punto de servicio"
+                      name="service_point_id"
+                      items={servicePoints}
+                      error={errors.service_point_id}
+                      handleChange={setFieldValue}
+                    />
+
                     <Input
+                      label="Empleado"
                       name='employee'
                       value={user.full_name}
                       handleChange={handleChange}

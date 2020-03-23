@@ -3,5 +3,9 @@ avatar como component
 revisar la app cuando el api esta caido (la app no muestra ninguna señal de que algo esta mal)
 mejorar los nombres de los screen de entries
 *importan: consultas se mandan paginadas.
+cuando recien inicio sesion las consultas no funcionan
+cuando en el registro inicial se le pregunta el lugar al que se dirije si este no esta que hacer
+dar manejo a la situacion que en el formulario de recepcion exista el cliente o el vehiculo
 * revisar como manejar puntos de recepcion y establecimientos
 algunos campos de formulario puedo porner la opcion de capitalizar palabras para casos como el nombre,
+mover help text a el component input

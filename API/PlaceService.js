@@ -25,4 +25,13 @@ export async function getPlaces() {
   }
 }
 
+export async function getServicePoints() {
+  try {
+    const response = await getAxiosIntance().get('/service-points');
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data.error : error.message;
+  }
+}
+
 init();
