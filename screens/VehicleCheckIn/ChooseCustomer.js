@@ -7,7 +7,7 @@ export default ChooseCustomer = ({route, navigation}) => {
   const { vehicleSelected, customerList } = route.params;
 
   const handleSelectCustomer = (index) => {
-   navigation.navigate('EntryForm', {
+   navigation.navigate('CheckInForm', {
     vehicleSelected,
     customerSelected: customerList[index],
    });

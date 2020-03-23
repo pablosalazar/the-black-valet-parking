@@ -4,111 +4,112 @@ import { Avatar, SearchBar, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale'; 
 
 import { Button, WaterMark } from '../../components';
-import { getVehicleByPlate } from '../../API/VehicleService';
+import { getCustomerByDocumentNumber } from '../../API/CustomerService';
 
-export default class Entries extends Component {
+export default class SearchCustomer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       search: '',
       spinner: false,
-      vehicleList: [],
       customerList: [],
+      vehicleSelected: props.route.params.vehicleSelected,
+      plate: props.route.params.plate,
     };
-
   }
 
   updateSearch = search => {
     this.setState({ search });
     if (search.length >= 2) {
-      this.searchByPlate(search);
+      this.searchByDocumentNumber(search);
     } else {
       this.setState({ spinner: false, error: null })
     }
   };
 
-  searchByPlate = async (search) => {
+  searchByDocumentNumber = async (search) => {
     this.setState({spinner: true});
     try {
-      response = await getVehicleByPlate(search.trim());
+      response = await getCustomerByDocumentNumber(search.trim());
       this.setState({
-        vehicleList: response.data,
+        customerList: response.data,
       })
     } catch (error) {
-      this.setState({error, vehicleList: [] });
+      this.setState({error, customerList: [] });
     } finally {
       this.setState({spinner: false});
     }
   }
 
-  handleSelectVehicle = (index) => {
-    const { vehicleList } = this.state;
-    this.props.navigation.navigate('ChooseCustomer', {
-      vehicleSelected: vehicleList[index],
-      customerList: vehicleList[index].customers,
+  handleSelectCustomer = (index) => {
+    const { plate, vehicleSelected, customerList } = this.state;
+    this.props.navigation.navigate('CheckInForm', {
+      customerSelected: customerList[index],
+      plate,
+      vehicleSelected,
     });
   }
 
-  goToSearchCustomer = () => {
-    const { search } = this.state;
-    this.props.navigation.navigate('SearchCustomer', {
-      plate: search,
+  goToForm = () => {
+    const { plate, vehicleSelected, search } = this.state;
+    this.props.navigation.navigate('CheckInForm', {
+      document_number: search,
+      plate,
+      vehicleSelected,
     });
   }
 
   render() {
-    const { search, spinner, vehicleList } = this.state;
+    const { plate, search, spinner, customerList } = this.state;
   
     return (
       <View style={{flex: 1, paddingHorizontal: 30 }}>
-        <Text style={styles.title}>PASO 1</Text>
+        <Text style={styles.title}>PASO 2</Text>
         <SearchBar
-          placeholder="Digite la placa..."
+          placeholder="Número de documento..."
           onChangeText={this.updateSearch}
           value={search}
           showLoading={spinner}
-          autoCapitalize='characters'
+          inputStyle={styles.textUppercase}
         />
 
         <Text style={styles.plate}>{search}</Text>
         {search.length === 0 && <WaterMark />}
         {search.length > 2 && (
-          vehicleList.length === 0 ? (
+          customerList.length === 0 ? (
             <>
               <Text style={styles.found}>NO SE ENCONTRARON RESULTADOS</Text>
               {search.length < 5 && <Text style={styles.found}>Escribe al menos 5 caracteres para continuar...</Text>}
             </>
           ) : (
             <>
-              <Text style={styles.found}>SE ENCONTRO {vehicleList.length} VEHICULOS</Text>
+              <Text style={styles.found}>SE ENCONTRO {customerList.length} PERSONAS</Text>
               <ScrollView>
                 {
-                  vehicleList.map((item, index) => (
-                    
+                  customerList.map((item, index) => (
                     <ListItem
                       key={index}
                       Component={TouchableScale}
                       friction={90}
                       tension={100}
                       activeScale={0.95}
-                      title={item.plate}
+                      title={item.name}
                       containerStyle={{ 
                         backgroundColor: 'rgba(49,149,165,.4)',
                         borderColor: '#3195a5',
                       }}
-                      titleStyle={{ color: '#fff', textTransform: 'uppercase' }}
+                      titleStyle={{ color: '#fff' }}
                       subtitleStyle={{ textTransform: 'uppercase', color: '#b5e6ed' }}
-                      subtitle={`${item.brand} - ${item.color}`}
-                      disabled={spinner}
+                      subtitle={`${item.document_type} - ${item.document_number}`}
                       leftIcon={
                         <Avatar
                           size="medium"
-                          overlayContainerStyle={{backgroundColor: '#000'}}
+                          overlayContainerStyle={{backgroundColor: '#b98700'}}
                           rounded 
-                          icon={{ name: 'car', color: '#b98700', type: 'material-community' }} 
+                          icon={{ name: 'account', color: '#000', type: 'material-community' }} 
                         />
                       }
-                      onPress={() => this.handleSelectVehicle(index)}
+                      onPress={() => this.handleSelectCustomer(index)}
                       bottomDivider
                       chevron
                     />
@@ -119,10 +120,10 @@ export default class Entries extends Component {
             </>
           )
         )}
-        {search.length > 4 && vehicleList.length === 0 && (
+        {search.length > 4 && customerList.length === 0 && (
           <Button
             label="Continuar"
-            handlePress={this.goToSearchCustomer}
+            handlePress={this.goToForm}
           />
         )}
       </View>
@@ -143,9 +144,9 @@ const styles = StyleSheet.create({
     color: '#b98700',
     fontWeight: "400",
     fontSize: 36,
+    textTransform: 'uppercase',
     textAlign: 'center',
     marginVertical: 10,
-    textTransform: 'uppercase'
   },
   found: {
     color: '#969696',
@@ -158,9 +159,11 @@ const styles = StyleSheet.create({
     width: 100,
     height: 40,
     fontSize: 20,
+    
   },
   textUppercase: {
     textTransform: 'uppercase',
+    color: '#ffffff'
   }
 })
 

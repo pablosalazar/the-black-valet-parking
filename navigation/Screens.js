@@ -6,27 +6,27 @@ import { Icon } from 'react-native-elements';
 // SCREENS
 import Services from "../screens/Services";
 // Entry vehicle
-import Entries from "../screens/EntryVehicles/Entries";
-import SearchCustomer from "../screens/EntryVehicles/SearchCustomer";
-import ChooseCustomer from "../screens/EntryVehicles/ChooseCustomer";
-import EntryForm from "../screens/EntryVehicles/EntryForm";
+import SearchVehicle from "../screens/VehicleCheckIn/SearchVehicle";
+import SearchCustomer from "../screens/VehicleCheckIn/SearchCustomer";
+import ChooseCustomer from "../screens/VehicleCheckIn/ChooseCustomer";
+import CheckInForm from "../screens/VehicleCheckIn/CheckInForm";
 
 import Profile from "../screens/Profile";
 
 
-const EntriesStack = createStackNavigator();
+const CheckInStack = createStackNavigator();
 
 function EntriesStackScreen() {
   return (
-    <EntriesStack.Navigator
-      initialRouteName="Entries"
+    <CheckInStack.Navigator
+      initialRouteName="SearchVehicle"
     >
-      <EntriesStack.Screen name="Entries" component={Entries} options={{ title: 'Buscar vehículo' }}/>
-      <EntriesStack.Screen name="SearchCustomer" component={SearchCustomer} options={{ title: 'Buscar cliente' }}/>
-      <EntriesStack.Screen name="ChooseCustomer" component={ChooseCustomer} options={{ title: 'Elige al cliente' }}/>
-      <EntriesStack.Screen name="EntryForm" component={EntryForm} options={{ title: 'Ingreso vehículo' }}/>
+      <CheckInStack.Screen name="SearchVehicle" component={SearchVehicle} options={{ title: 'Buscar vehículo' }}/>
+      <CheckInStack.Screen name="SearchCustomer" component={SearchCustomer} options={{ title: 'Buscar cliente' }}/>
+      <CheckInStack.Screen name="ChooseCustomer" component={ChooseCustomer} options={{ title: 'Elige al cliente' }}/>
+      <CheckInStack.Screen name="CheckInForm" component={CheckInForm} options={{ title: 'Ingreso vehículo' }}/>
 
-    </EntriesStack.Navigator>
+    </CheckInStack.Navigator>
   );
 }
 
@@ -43,7 +43,7 @@ export default function HomeStack() {
 
           if (route.name === 'Services') {
             iconName = 'format-list-checks';
-          } else if (route.name === 'Entries') {
+          } else if (route.name === 'CheckIn') {
             iconName = 'car';
           } else if (route.name === 'Profile') {
             iconName = 'account';
@@ -63,7 +63,7 @@ export default function HomeStack() {
       }}
     >
       <Tab.Screen name="Services" component={Services} options={{ title: 'Servicios' }}/>
-      <Tab.Screen name="Entries" component={EntriesStackScreen} options={{ title: 'Ingresar' }}/>
+      <Tab.Screen name="CheckIn" component={EntriesStackScreen} options={{ title: 'Recepciones' }}/>
       <Tab.Screen name="Profile" component={Profile} options={{ title: 'Perfil' }}/>
     </Tab.Navigator>
   )

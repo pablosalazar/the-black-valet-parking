@@ -55,7 +55,7 @@ const brand_list = [
   { label: 'TOYOTA', value: 'TOYOTA' },
 ]
 
-export default class Entries extends Component {
+export default class CheckInForm extends Component {
   static contextType = AppContext
 
   constructor(props) {
