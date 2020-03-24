@@ -21,9 +21,11 @@ export default ChooseCustomer = ({route, navigation}) => {
   
   return (
     <View style={{flex: 1, paddingHorizontal: 30 }}>
-      <Text style={styles.title}>PASO 2</Text>
-      <Text style={styles.found}>SE ENCONTRO {customerList.length} CLIENTES</Text>
-      <Text style={styles.text}>Elije una opción:</Text>
+      <Text style={styles.title}>SELECCIONAR CLIENTE</Text>
+      <Text style={styles.found}>
+        Se encontró {customerList.length} clientes relacionados con el vehículo de placas {vehicleSelected.plate}
+      </Text>
+      <Text style={styles.text}>Elige una opción:</Text>
       <ScrollView>
         <ListItem
           Component={TouchableScale}

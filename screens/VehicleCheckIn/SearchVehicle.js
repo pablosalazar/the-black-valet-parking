@@ -61,7 +61,7 @@ export default class SearchVehicle extends Component {
   
     return (
       <View style={{flex: 1, paddingHorizontal: 30 }}>
-        <Text style={styles.title}>PASO 1</Text>
+        <Text style={styles.title}>BUSCAR VEHICULO</Text>
         <SearchBar
           placeholder="Digite la placa..."
           onChangeText={this.updateSearch}

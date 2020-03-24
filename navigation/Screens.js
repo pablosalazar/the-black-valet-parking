@@ -21,10 +21,10 @@ function EntriesStackScreen() {
     <CheckInStack.Navigator
       initialRouteName="SearchVehicle"
     >
-      <CheckInStack.Screen name="SearchVehicle" component={SearchVehicle} options={{ title: 'Buscar vehículo' }}/>
-      <CheckInStack.Screen name="SearchCustomer" component={SearchCustomer} options={{ title: 'Buscar cliente' }}/>
-      <CheckInStack.Screen name="ChooseCustomer" component={ChooseCustomer} options={{ title: 'Elige al cliente' }}/>
-      <CheckInStack.Screen name="CheckInForm" component={CheckInForm} options={{ title: 'Ingreso vehículo' }}/>
+      <CheckInStack.Screen name="SearchVehicle" component={SearchVehicle} options={{ title: 'Recepción del vehículo' }}/>
+      <CheckInStack.Screen name="SearchCustomer" component={SearchCustomer} options={{ title: 'Recepción del vehículo' }}/>
+      <CheckInStack.Screen name="ChooseCustomer" component={ChooseCustomer} options={{ title: 'Recepción del vehículo' }}/>
+      <CheckInStack.Screen name="CheckInForm" component={CheckInForm} options={{ title: 'Recepción del vehículo' }}/>
 
     </CheckInStack.Navigator>
   );
@@ -63,7 +63,7 @@ export default function HomeStack() {
       }}
     >
       <Tab.Screen name="Services" component={Services} options={{ title: 'Servicios' }}/>
-      <Tab.Screen name="CheckIn" component={EntriesStackScreen} options={{ title: 'Recepciones' }}/>
+      <Tab.Screen name="CheckIn" component={EntriesStackScreen} options={{ title: 'Recepción' }}/>
       <Tab.Screen name="Profile" component={Profile} options={{ title: 'Perfil' }}/>
     </Tab.Navigator>
   )

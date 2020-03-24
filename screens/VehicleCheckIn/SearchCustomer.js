@@ -64,9 +64,9 @@ export default class SearchCustomer extends Component {
   
     return (
       <View style={{flex: 1, paddingHorizontal: 30 }}>
-        <Text style={styles.title}>PASO 2</Text>
+        <Text style={styles.title}>BUSCAR CLIENTE</Text>
         <SearchBar
-          placeholder="Número de documento..."
+          placeholder="Digite de documento..."
           onChangeText={this.updateSearch}
           value={search}
           showLoading={spinner}
