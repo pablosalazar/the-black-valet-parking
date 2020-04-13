@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { 
+import {
   Image,
-  View, 
+  View,
   Text,
   StyleSheet,
   KeyboardAvoidingView
@@ -30,7 +30,7 @@ export default function SignIn() {
   const [error, setError] = React.useState(null);
 
   const { signIn } = React.useContext(AppContext);
-  
+
   const handleSubmit = async (values) => {
     try {
       setIsLoading(true);
@@ -44,24 +44,24 @@ export default function SignIn() {
         setError('Error inesperado');
       }
       setIsLoading(false);
-    } 
+    }
   }
 
   return (
-    <KeyboardAvoidingView style={{flexGrow: 1 }} behavior="padding" enabled>
-      <View style={{flex: 1, justifyContent: 'center', padding: 30}}>
+    <KeyboardAvoidingView style={{ flexGrow: 1 }} behavior="padding" enabled>
+      <View style={{ flex: 1, justifyContent: 'center', padding: 30 }}>
 
-        <View style={{alignItems: 'center'}}>
+        <View style={{ alignItems: 'center' }}>
           <Image
-            style={{width: 180, height: 117, marginBottom: 10 }}
+            style={{ width: 180, height: 117, marginBottom: 10 }}
             source={require('../../assets/images/logo.png')}
           />
-        </View> 
+        </View>
         <Text style={styles.title}>INICIAR SESIÓN</Text>
         {error && <AlertCustom error={error} />}
         <Formik
           initialValues={{ login: '', password: '' }}
-          onSubmit={values => {handleSubmit(values)}}
+          onSubmit={values => { handleSubmit(values) }}
           validationSchema={validationSchema}
         >
           {({ handleChange, values, handleSubmit, errors }) => (
@@ -69,7 +69,7 @@ export default function SignIn() {
               {isLoading &&
                 <Loader loading={isLoading} />
               }
-              <Input 
+              <Input
                 name="login"
                 value={values.login}
                 placeholder="Usuario o correo electrónico"
@@ -79,7 +79,7 @@ export default function SignIn() {
                 error={errors.login}
               />
 
-              <Input 
+              <Input
                 name="password"
                 value={values.password}
                 placeholder="Contraseña"
@@ -94,21 +94,21 @@ export default function SignIn() {
                 text="¿Olvidaste tu contraseña?"
                 goTo="RecoverPassword"
               />
-              
+
               <Button
                 label="ENTRAR"
                 handlePress={handleSubmit}
               />
 
               <Text style={styles.text}>©2020 The Black</Text>
-              
+
             </>
           )}
         </Formik>
       </View>
     </KeyboardAvoidingView>
   )
-  
+
 }
 
 const styles = StyleSheet.create({

@@ -3,7 +3,7 @@ import { API_URL } from '../constants/Path';
 import { AsyncStorage } from 'react-native';
 
 
-export async function loginUser(data) { 
+export async function loginUser(data) {
   try {
     const response = await axios.post(API_URL + '/auth/login', data);
     await AsyncStorage.setItem('access_token', response.data.access_token);
