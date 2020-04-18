@@ -13,7 +13,7 @@ function getAxiosIntance() {
       'Authorization': 'Bearer ' + ACCESS_TOKEN,
     },
   });
-  
+
 }
 
 export async function createVehicle(data) {

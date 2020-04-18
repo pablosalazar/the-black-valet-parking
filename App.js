@@ -103,15 +103,15 @@ export default function App() {
     // We haven't finished checking for the token yet
     return <SplashScreen />;
   }
-  
+
   return (
-    <AppContext.Provider value={{...appContext, user: state.user}}>
+    <AppContext.Provider value={{ ...appContext, user: state.user }}>
       <NavigationContainer theme={DarkTheme}>
         {state.userToken === null ? (
           <AuthStack />
         ) : (
-          <HomeStack />
-        )}
+            <HomeStack />
+          )}
       </NavigationContainer>
     </AppContext.Provider>
   )

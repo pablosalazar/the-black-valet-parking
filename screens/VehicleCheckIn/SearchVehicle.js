@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Avatar, SearchBar, ListItem } from 'react-native-elements';
-import TouchableScale from 'react-native-touchable-scale'; 
+import TouchableScale from 'react-native-touchable-scale';
 
 import { Button, WaterMark } from '../../components';
 import { getVehicleByPlate } from '../../API/VehicleService';
+import AlertCustom from '../../components/Alert';
 
 export default class SearchVehicle extends Component {
   constructor(props) {
@@ -28,16 +29,16 @@ export default class SearchVehicle extends Component {
   };
 
   searchByPlate = async (search) => {
-    this.setState({spinner: true});
+    this.setState({ spinner: true });
     try {
       response = await getVehicleByPlate(search.trim());
       this.setState({
         vehicleList: response.data,
-      })
+      });
     } catch (error) {
-      this.setState({error, vehicleList: [] });
+      this.setState({ error, vehicleList: [] });
     } finally {
-      this.setState({spinner: false});
+      this.setState({ spinner: false });
     }
   }
 
@@ -57,10 +58,10 @@ export default class SearchVehicle extends Component {
   }
 
   render() {
-    const { search, spinner, vehicleList } = this.state;
-  
+    const { search, spinner, vehicleList, error } = this.state;
+
     return (
-      <View style={{flex: 1, paddingHorizontal: 30 }}>
+      <View style={{ flex: 1, paddingHorizontal: 30 }}>
         <Text style={styles.title}>BUSCAR VEHICULO</Text>
         <SearchBar
           placeholder="Digite la placa..."
@@ -71,53 +72,54 @@ export default class SearchVehicle extends Component {
         />
 
         <Text style={styles.plate}>{search}</Text>
+        {error && <AlertCustom error={error} />}
         {search.length === 0 && <WaterMark />}
-        {search.length > 2 && (
+        {!error && search.length > 2 && (
           vehicleList.length === 0 ? (
             <>
               <Text style={styles.found}>NO SE ENCONTRARON RESULTADOS</Text>
               {search.length < 5 && <Text style={styles.found}>Escribe al menos 5 caracteres para continuar...</Text>}
             </>
           ) : (
-            <>
-              <Text style={styles.found}>SE ENCONTRO {vehicleList.length} VEHICULOS</Text>
-              <ScrollView>
-                {
-                  vehicleList.map((item, index) => (
-                    
-                    <ListItem
-                      key={index}
-                      Component={TouchableScale}
-                      friction={90}
-                      tension={100}
-                      activeScale={0.95}
-                      title={item.plate}
-                      containerStyle={{ 
-                        backgroundColor: 'rgba(49,149,165,.4)',
-                        borderColor: '#3195a5',
-                      }}
-                      titleStyle={{ color: '#fff', textTransform: 'uppercase' }}
-                      subtitleStyle={{ textTransform: 'uppercase', color: '#b5e6ed' }}
-                      subtitle={`${item.brand} - ${item.color}`}
-                      disabled={spinner}
-                      leftIcon={
-                        <Avatar
-                          size="medium"
-                          overlayContainerStyle={{backgroundColor: '#000'}}
-                          rounded 
-                          icon={{ name: 'car', color: '#b98700', type: 'material-community' }} 
-                        />
-                      }
-                      onPress={() => this.handleSelectVehicle(index)}
-                      bottomDivider
-                      chevron
-                    />
-                  ))
-                }
-              </ScrollView>
-              <View style={{marginBottom: 30}} />
-            </>
-          )
+              <>
+                <Text style={styles.found}>SE ENCONTRO {vehicleList.length} VEHICULOS</Text>
+                <ScrollView>
+                  {
+                    vehicleList.map((item, index) => (
+
+                      <ListItem
+                        key={index}
+                        Component={TouchableScale}
+                        friction={90}
+                        tension={100}
+                        activeScale={0.95}
+                        title={item.plate}
+                        containerStyle={{
+                          backgroundColor: 'rgba(49,149,165,.4)',
+                          borderColor: '#3195a5',
+                        }}
+                        titleStyle={{ color: '#fff', textTransform: 'uppercase' }}
+                        subtitleStyle={{ textTransform: 'uppercase', color: '#b5e6ed' }}
+                        subtitle={`${item.brand} - ${item.color}`}
+                        disabled={spinner}
+                        leftIcon={
+                          <Avatar
+                            size="medium"
+                            overlayContainerStyle={{ backgroundColor: '#000' }}
+                            rounded
+                            icon={{ name: 'car', color: '#b98700', type: 'material-community' }}
+                          />
+                        }
+                        onPress={() => this.handleSelectVehicle(index)}
+                        bottomDivider
+                        chevron
+                      />
+                    ))
+                  }
+                </ScrollView>
+                <View style={{ marginBottom: 30 }} />
+              </>
+            )
         )}
         {search.length > 4 && vehicleList.length === 0 && (
           <Button
@@ -127,8 +129,8 @@ export default class SearchVehicle extends Component {
         )}
       </View>
     )
-  }    
-  
+  }
+
 }
 
 const styles = StyleSheet.create({
